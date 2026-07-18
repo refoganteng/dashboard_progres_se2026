@@ -1,0 +1,3177 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard Progres SE2026 BPS <span class="kabupaten-name">Kepahiang</span></title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              blue: {
+                50: '#f0fdfa',
+                100: '#ccfbf1',
+                200: '#99f6e4',
+                300: '#5eead4',
+                400: '#2dd4bf',
+                500: '#14b8a6',
+                600: '#0d9488', 
+                700: '#0f766e', // Teal color
+                800: '#115e59',
+                900: '#134e4a',
+                950: '#042f2e',
+              },
+              orange: {
+                50: '#fff5f2',
+                100: '#ffe6df',
+                200: '#fec9bf',
+                300: '#fea08f',
+                400: '#fc6b54',
+                500: '#ff7f50', // Coral color
+                600: '#e0532b',
+                700: '#bc3c1c',
+                800: '#9c3118',
+                900: '#812c19',
+                950: '#461307',
+              },
+              slate: {
+                50: '#faf6f0', // Very light sand background
+                100: '#f5e6ca', // Sand divider
+                200: '#ecd5b0', // Slightly darker sand
+                300: '#d9b68a',
+                400: '#bca080',
+                500: '#9b7e5f',
+                600: '#7a5e42',
+                700: '#5c452e',
+                800: '#402e1c', // Dark charcoal/brown text
+                900: '#281c10',
+                950: '#150d06',
+              },
+              indigo: {
+                50: '#fdfbf7', // Sand-light
+                100: '#f5e6ca',
+                200: '#ecd5b0',
+                300: '#d9b68a',
+                400: '#bca080',
+                500: '#9b7e5f',
+                600: '#7a5e42',
+                700: '#5c452e',
+                800: '#402e1c',
+                900: '#281c10',
+                950: '#150d06',
+              }
+            }
+          }
+        }
+      }
+    </script>
+    <!-- Google Fonts (Plus Jakarta Sans & JetBrains Mono) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        font-family: "Plus Jakarta Sans", sans-serif;
+      }
+      .font-mono {
+        font-family: "JetBrains Mono", monospace !important;
+      }
+      /* Custom Scrollbar */
+      ::-webkit-scrollbar {
+        width: 6px;
+        height: 6px;
+      }
+      ::-webkit-scrollbar-track {
+        background: transparent; 
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #f5e6ca; 
+        border-radius: 10px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: #d5b06d; 
+      }
+    </style>
+  </head>
+  <body class="bg-slate-50 text-slate-800 flex flex-col min-h-screen">
+    <!-- Main Container -->
+    <div id="app" class="flex-grow flex flex-col">
+      <!-- Loading Overlay -->
+      <div
+        id="loading"
+        class="hidden fixed inset-0 bg-blue-900/80 z-50 flex flex-col items-center justify-center text-white"
+      >
+        <div
+          class="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-orange-500 mb-4"
+        ></div>
+        <p class="text-lg font-semibold tracking-wide">
+          Memuat Data Progres SE2026...
+        </p>
+        <p class="text-sm text-blue-200 mt-1">
+          Mengambil data real-time dari BPS <span class="kabupaten-name">Kepahiang</span>
+        </p>
+      </div>
+
+      <!-- Alert Banner (Aesthetic Custom Modals) -->
+      <div
+        id="alert-box"
+        class="hidden fixed top-4 right-4 z-50 max-w-sm w-full bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg shadow-lg flex items-start gap-3 transition-all duration-300 transform translate-y-0"
+      >
+        <div class="flex-grow">
+          <strong class="font-bold">Error:</strong>
+          <span id="alert-message" class="block sm:inline text-sm"
+            >Terjadi kesalahan.</span
+          >
+        </div>
+        <button
+          onclick="closeAlert()"
+          class="text-red-700 hover:text-red-900 font-bold"
+        >
+          &times;
+        </button>
+      </div>
+
+      <!-- LOGIN SCREEN -->
+      <div
+        id="view-login"
+        class="flex-grow flex items-center justify-center px-4 py-12 bg-slate-50 relative overflow-hidden"
+      >
+        <!-- Aesthetic Teal & Coral Blobs -->
+        <div class="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] bg-orange-200/50 rounded-full filter blur-[120px] pointer-events-none"></div>
+        <div class="absolute bottom-[-10%] right-[-10%] w-[500px] h-[500px] bg-blue-200/50 rounded-full filter blur-[120px] pointer-events-none"></div>
+        <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-[0.015] pointer-events-none"></div>
+        
+        <div
+          class="max-w-md w-full bg-white/95 backdrop-blur-xl rounded-[2rem] shadow-2xl overflow-hidden border border-slate-100 relative z-10"
+        >
+          <!-- Brand Header -->
+          <div
+            class="p-10 pb-6 text-center relative"
+          >
+            <div class="flex justify-center mb-4">
+              <div class="bg-gradient-to-br from-orange-500 to-orange-600 p-4 rounded-2xl shadow-lg shadow-orange-500/30 text-white">
+                <svg
+                  class="h-10 w-10"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M16 8v8m-4-5v5m-4-2v2m-2 4h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+                  ></path>
+                </svg>
+              </div>
+            </div>
+            <h1 class="text-2xl font-extrabold tracking-tight text-slate-800">Sensus Ekonomi 2026</h1>
+            <p class="text-slate-500 text-sm mt-1.5 font-medium">
+              BPS <span class="kabupaten-name">Kepahiang</span>
+            </p>
+          </div>
+
+          <!-- Login Form -->
+          <div class="p-8 pt-2">
+            <div class="mb-6">
+              <label class="block text-sm font-semibold text-slate-700 mb-2"
+                >Pilih Kategori Pengguna</label
+              >
+              <div class="grid grid-cols-2 gap-2 bg-slate-100/80 p-1 rounded-xl">
+                <button
+                  id="btn-tab-petugas"
+                  onclick="switchLoginTab('petugas')"
+                  class="py-2.5 text-sm font-bold rounded-lg transition-all bg-white text-blue-700 shadow-sm border border-slate-200/50"
+                >
+                  Petugas (PPL/PML)
+                </button>
+                <button
+                  id="btn-tab-admin"
+                  onclick="switchLoginTab('admin')"
+                  class="py-2.5 text-sm font-medium rounded-lg transition-all text-slate-500 hover:text-blue-700 hover:bg-white/50"
+                >
+                  Administrator
+                </button>
+              </div>
+            </div>
+
+            <!-- Petugas Login Form -->
+            <div id="form-petugas" class="space-y-4">
+              <div>
+                <label
+                  for="input-email"
+                  class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2"
+                  >Email Terdaftar</label
+                >
+                <div class="relative">
+                  <span
+                    class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400"
+                    >@</span
+                  >
+                  <input
+                    type="email"
+                    id="input-email"
+                    placeholder="nama@gmail.com"
+                    class="w-full pl-9 pr-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm transition-all"
+                  />
+                </div>
+                <p class="text-xs text-slate-400 mt-1.5">
+                  Gunakan email PPL atau PML Anda sesuai data master.
+                </p>
+              </div>
+            </div>
+
+            <!-- Admin Login Form (Hidden by default) -->
+            <div id="form-admin" class="space-y-4 hidden">
+              <div>
+                <label
+                  for="input-code"
+                  class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2"
+                  >Kode Akses Admin</label
+                >
+                <div class="relative">
+                  <span
+                    class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400"
+                    >🔑</span
+                  >
+                  <input
+                    type="password"
+                    id="input-code"
+                    placeholder="Masukkan Kode Admin"
+                    class="w-full pl-9 pr-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm transition-all"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <button
+              onclick="handleLogin()"
+              class="w-full mt-6 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-bold py-3 px-4 rounded-xl transition-all shadow-[0_8px_20px_-6px_rgba(255,127,80,0.4)] active:scale-[0.99] flex items-center justify-center gap-2 group"
+            >
+              Masuk ke Dashboard
+              <svg
+                class="h-5 w-5 transform group-hover:translate-x-1 transition-transform"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M14 5l7 7m0 0l-7 7m7-7H3"
+                ></path>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- MAIN DASHBOARD SCREEN (Hidden by default) -->
+      <div id="view-dashboard" class="hidden flex-grow flex flex-col">
+        <!-- Navbar -->
+        <nav
+          class="bg-white text-slate-800 shadow-sm border-b border-slate-200 sticky top-0 z-40"
+        >
+          <div class="max-w-full mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+              <!-- Brand -->
+              <div class="flex items-center gap-3">
+                <div class="bg-gradient-to-br from-orange-500 to-orange-600 p-1.5 rounded-lg text-white shadow-md shadow-orange-500/20">
+                  <svg
+                    class="h-6 w-6"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M16 8v8m-4-5v5m-4-2v2m-2 4h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+                    ></path>
+                  </svg>
+                </div>
+                <div>
+                  <span
+                    class="font-extrabold tracking-tight text-lg block leading-none"
+                    >SE2026</span
+                  >
+                  <span class="text-[10px] text-slate-400 font-bold block mt-0.5 tracking-widest uppercase"
+                    ><span class="kabupaten-name">Kepahiang</span></span
+                  >
+                </div>
+              </div>
+
+              <!-- Profile & Logout -->
+              <div class="flex items-center gap-4">
+                <div class="hidden sm:block text-right">
+                  <p id="nav-user-name" class="font-bold text-sm">
+                    Nama Pengguna
+                  </p>
+                  <span
+                    id="nav-user-role"
+                    class="inline-block text-orange-500 text-[10px] font-bold uppercase tracking-wider"
+                    >Role</span
+                  >
+                </div>
+                <button
+                  onclick="handleLogout()"
+                  class="text-slate-400 hover:text-red-500 hover:bg-red-50 p-2 rounded-xl transition-all flex items-center gap-2"
+                  title="Keluar"
+                >
+                  <svg
+                    class="h-5 w-5"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2.5"
+                      d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+                    ></path>
+                  </svg>
+                </button>
+              </div>
+            </div>
+          </div>
+        </nav>
+
+        <!-- Dashboard Main Area -->
+        <main class="w-full max-w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8 pb-24">
+          <!-- Banner Selamat Datang & Real-time Sync -->
+          <div
+            class="bg-gradient-to-r from-blue-800 to-blue-900 rounded-2xl p-6 sm:p-8 text-white shadow-xl flex flex-col md:flex-row justify-between items-start md:items-center gap-6 relative overflow-hidden"
+          >
+            <div
+              class="absolute -right-16 -bottom-16 w-64 h-64 bg-white/5 rounded-full pointer-events-none"
+            ></div>
+            <div>
+              <span
+                class="text-xs font-bold tracking-widest text-orange-400 bg-orange-500/10 px-3 py-1 rounded-full border border-orange-500/20"
+                >Pantau Progres Harian</span
+              >
+              <h2
+                class="text-2xl sm:text-3xl font-extrabold mt-3"
+                id="welcome-message"
+              >
+                Selamat Datang, Petugas!
+              </h2>
+              <p class="text-xs text-blue-200 mt-2 font-medium">
+                Terakhir update progres per <span id="last-update-date" class="text-orange-300 font-bold">-</span> pukul 07.00 WIB
+              </p>
+            </div>
+            
+            <div class="text-right shrink-0 bg-white/10 p-4 rounded-xl border border-white/20 z-10 w-full md:w-auto mt-2 md:mt-0 flex flex-col justify-center">
+              <p class="text-[10px] sm:text-xs text-blue-200 font-semibold uppercase tracking-wider mb-2 md:mb-1 text-left md:text-right">Evaluasi Target Kemarin</p>
+              <div class="flex items-center gap-4 justify-between md:justify-end">
+                <div class="text-left md:text-right">
+                  <p id="header-kemarin-hari" class="text-lg sm:text-xl font-bold text-white leading-tight">Hari ke-#</p>
+                  <p id="header-kemarin-tanggal" class="text-[10px] sm:text-xs text-blue-300">Tanggal</p>
+                </div>
+                <div class="h-8 w-px bg-white/20 mx-1 hidden sm:block"></div>
+                <div class="text-right">
+                  <p class="text-lg sm:text-xl font-bold text-orange-400 leading-tight">
+                    <span id="header-kemarin-target">0</span> <span class="text-sm font-semibold">Submitted</span>
+                  </p>
+                  <p class="text-[10px] sm:text-xs text-blue-300">Kumulatif / PPL</p>
+                </div>
+              </div>
+            </div>
+
+          </div>
+          <!-- <button onclick="refreshData()" class="w-full md:w-auto bg-orange-500 hover:bg-orange-600 text-white px-5 py-3 rounded-xl transition-all font-bold shadow-lg hover:shadow-orange-500/20 flex items-center justify-center gap-2 self-stretch md:self-auto shrink-0">
+            <svg id="sync-icon" class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 1121.21 8H17"></path>
+            </svg>
+            Sinkronisasi Data
+          </button> -->
+
+          <!-- ================= PANEL PPL ================= -->
+          <div id="panel-ppl" class="hidden space-y-6">
+            <!-- PPL Warnings Container -->
+            <div id="ppl-warnings-container" class="space-y-3 hidden">
+              <!-- PPL Warning Draft -->
+              <div id="ppl-warning-draft" class="hidden bg-amber-100 border-l-4 border-amber-500 text-amber-800 p-4 rounded-xl shadow-sm flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                  <svg class="h-6 w-6 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                  <div>
+                    <h3 class="font-bold text-sm">Peringatan: Dokumen Draft Tinggi</h3>
+                    <p class="text-xs">Anda memiliki lebih dari 20 dokumen berstatus Draft. Harap segera selesaikan!</p>
+                  </div>
+                </div>
+              </div>
+              <!-- PPL Warning Progres Rendah -->
+              <div id="ppl-warning-ppl-rendah" class="hidden bg-rose-100 border-l-4 border-rose-500 text-rose-700 p-4 rounded-xl shadow-sm flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                  <svg class="h-6 w-6 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                  <div>
+                    <h3 class="font-bold text-sm">Peringatan: Progres Rendah</h3>
+                    <p class="text-xs">Anda termasuk PPL Progres Rendah (Hutang >= 28 assignment). Harap segera kejar target harian!</p>
+                  </div>
+                </div>
+              </div>
+              <!-- PPL Warning Tidak Ditemukan -->
+              <div id="ppl-warning-tidak-ditemukan" class="hidden bg-red-100 border-l-4 border-red-500 text-red-700 p-4 rounded-xl shadow-sm flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                  <svg class="h-6 w-6 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                  <div>
+                    <h3 class="font-bold text-sm">Peringatan: Dokumen Tidak Ditemukan Tinggi</h3>
+                    <p class="text-xs">Terdapat indikasi kinerja yang perlu diperbaiki: Persentase dokumen Tidak Ditemukan Anda melebihi 50% dari total progres.</p>
+                  </div>
+                </div>
+              </div>
+              <!-- PPL Warning NIK Kosong -->
+              <div id="ppl-warning-nik-kosong" class="hidden bg-purple-100 border-l-4 border-purple-500 text-purple-700 p-4 rounded-xl shadow-sm flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                  <svg class="h-6 w-6 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                  <div>
+                    <h3 class="font-bold text-sm">Peringatan: Ada NIK Anggota Keluarga Kosong (>10)</h3>
+                    <p class="text-xs">Anda memiliki lebih dari 10 dokumen dengan NIK anggota keluarga kosong. Harap segera periksa dan lengkapi!</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- PPL Target Section (Full Width) -->
+            <div class="w-full">
+              <!-- Target Card -->
+              <div
+                id="ppl-target-card"
+                class="bg-white rounded-2xl p-6 shadow-md border border-slate-100 flex flex-col items-center justify-center text-center"
+              >
+                <div class="flex flex-col items-center">
+                  <h3
+                    class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2"
+                  >
+                    Evaluasi Target Harian
+                  </h3>
+                  <span
+                    id="ppl-target-badge"
+                    class="inline-block text-xs font-bold px-2.5 py-1 rounded-full mb-4"
+                    >Mengevaluasi...</span
+                  >
+                  <p
+                    id="ppl-target-advice"
+                    class="text-sm text-slate-600 leading-relaxed max-w-2xl"
+                  >
+                    Sistem sedang menganalisis pencapaian harian Anda...
+                  </p>
+                </div>
+                <div
+                  class="border-t border-slate-100 pt-4 mt-4 flex justify-center items-center gap-8 text-xs text-slate-400 w-full max-w-md"
+                >
+                  <span>Mulai Sensus: 15 Juni 2026</span>
+                  <span>Target: <span class="target-per-hari-text">7</span> Assignment / Hari</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Performance Section (5 Cards) -->
+            <div class="grid grid-cols-1 sm:grid-cols-5 gap-6">
+              <!-- Stat Card Total Assignment -->
+              <div
+                class="bg-white rounded-2xl p-6 shadow-md border border-slate-100 relative overflow-hidden flex flex-col items-center justify-center text-center"
+              >
+                <div class="absolute right-4 top-4 text-blue-50/50">
+                  <svg
+                    class="h-24 w-24"
+                    fill="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 10H7v-2h10v2zm0-4H7V7h10v2zm0 8H7v-2h10v2z"
+                    />
+                  </svg>
+                </div>
+                <div class="relative z-10 flex flex-col items-center">
+                  <h3
+                    class="text-xs font-bold text-slate-400 uppercase tracking-wider"
+                  >
+                    Total Beban Tugas
+                  </h3>
+                  <p
+                    id="ppl-total-assignment"
+                    class="text-4xl font-extrabold text-slate-800 mt-4 font-mono tracking-tight"
+                  >
+                    0
+                  </p>
+                  <p class="text-xs text-slate-500 mt-2">
+                    Jumlah keseluruhan assignment target
+                  </p>
+                </div>
+              </div>
+
+              <!-- Progress Ring Card -->
+              <div
+                class="bg-white rounded-2xl p-6 shadow-md border border-slate-100 relative overflow-hidden flex flex-col items-center justify-center text-center"
+              >
+                <div class="w-full flex flex-col items-center">
+                  <h3
+                    class="text-xs font-bold text-slate-400 uppercase tracking-wider"
+                  >
+                    Penyelesaian
+                  </h3>
+                  <p
+                    id="ppl-progress-total"
+                    class="text-4xl font-extrabold text-slate-800 mt-4 font-mono tracking-tight"
+                  >
+                    0
+                    <span class="text-sm text-slate-400 font-medium"
+                      >Assignment</span
+                    >
+                  </p>
+                  <p class="text-xs text-slate-500 mt-2 mb-4">Selesai / Target</p>
+                </div>
+                <div class="relative flex items-center justify-center">
+                  <svg class="w-24 h-24 transform -rotate-90">
+                     <circle
+                      cx="48"
+                      cy="48"
+                      r="38"
+                      stroke="#f5e6ca"
+                      stroke-width="8"
+                      fill="transparent"
+                    />
+                    <circle
+                      id="ppl-progress-circle"
+                      cx="48"
+                      cy="48"
+                      r="38"
+                      stroke="#FF7F50"
+                      stroke-width="8"
+                      fill="transparent"
+                      stroke-dasharray="238.76"
+                      stroke-dashoffset="238.76"
+                      stroke-linecap="round"
+                    />
+                  </svg>
+                  <span
+                    id="ppl-progress-percent"
+                    class="absolute text-base font-bold text-slate-700"
+                    >0%</span
+                  >
+                </div>
+              </div>
+
+              <!-- Stat Card Tidak Ditemukan -->
+              <div
+                class="bg-white rounded-2xl p-6 shadow-md border border-slate-100 relative overflow-hidden flex flex-col items-center justify-center text-center"
+              >
+                <div class="absolute right-4 top-4 text-red-50/50">
+                  <svg
+                    class="h-24 w-24"
+                    fill="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"
+                    />
+                  </svg>
+                </div>
+                <div class="relative z-10 flex flex-col items-center">
+                  <h3
+                    class="text-xs font-bold text-slate-400 uppercase tracking-wider"
+                  >
+                    Tidak Ditemukan
+                  </h3>
+                  <p
+                    id="ppl-total-tidak-ditemukan"
+                    class="text-4xl font-extrabold text-red-600 mt-4 font-mono tracking-tight"
+                  >
+                    0
+                  </p>
+                  <p class="text-xs text-slate-500 mt-2">
+                    Jumlah assignment tidak ditemukan
+                  </p>
+                </div>
+              </div>
+
+              <!-- Stat Card NIK Kosong -->
+              <div
+                class="bg-white rounded-2xl p-6 shadow-md border border-slate-100 relative overflow-hidden flex flex-col items-center justify-center text-center"
+              >
+                <div class="absolute right-4 top-4 text-purple-50/50">
+                  <svg
+                    class="h-24 w-24"
+                    fill="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"
+                    />
+                  </svg>
+                </div>
+                <div class="relative z-10 flex flex-col items-center">
+                  <h3
+                    class="text-xs font-bold text-slate-400 uppercase tracking-wider"
+                  >
+                    NIK Kosong
+                  </h3>
+                  <p
+                    id="ppl-total-nik-kosong"
+                    class="text-4xl font-extrabold text-purple-600 mt-4 font-mono tracking-tight"
+                  >
+                    0
+                  </p>
+                  <p class="text-xs text-slate-500 mt-2">
+                    NIK anggota keluarga kosong
+                  </p>
+                </div>
+              </div>
+
+              <!-- Rank Card -->
+              <div
+                class="bg-white rounded-2xl p-6 shadow-md border border-slate-100 relative overflow-hidden flex flex-col items-center justify-center text-center"
+              >
+                <div class="absolute right-4 top-4 text-yellow-50/50">
+                  <svg
+                    class="h-24 w-24"
+                    fill="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"
+                    />
+                  </svg>
+                </div>
+                <div class="relative z-10 flex flex-col items-center">
+                  <h3
+                    class="text-xs font-bold text-slate-400 uppercase tracking-wider"
+                  >
+                    Peringkat PPL
+                  </h3>
+                  <p
+                    id="ppl-rank"
+                    class="text-4xl font-extrabold text-orange-500 mt-4 font-mono tracking-tight"
+                  >
+                    -#
+                  </p>
+                  <p class="text-xs text-slate-500 mt-2">
+                    Posisi kamu dari semua PPL
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Rincian Wilayah Kerja (PPL Cards + Pagination) -->
+            <div
+              class="bg-white rounded-2xl shadow-md border border-slate-100 overflow-hidden"
+            >
+              <div
+                class="p-6 border-b border-slate-100 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4"
+              >
+                <div>
+                  <h3 class="text-lg font-bold text-slate-800">
+                    Rincian Per Wilayah Kerja
+                  </h3>
+                  <p class="text-xs text-slate-500 mt-1">
+                    Daftar wilayah tugas sensus aktif Anda
+                  </p>
+                </div>
+                <div class="w-full sm:w-64">
+                  <input
+                    type="text"
+                    id="ppl-search-wilayah"
+                    oninput="filterPPLWilayah()"
+                    placeholder="Cari Desa / SLS..."
+                    class="w-full px-4 py-2 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                  />
+                </div>
+              </div>
+
+              <!-- Cards Container -->
+              <div
+                id="ppl-cards-container"
+                class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-6"
+              >
+                <!-- Loaded dynamically as cards -->
+              </div>
+
+              <!-- Pagination Footer -->
+              <div
+                class="flex justify-between items-center p-4 bg-slate-50 border-t border-slate-100 rounded-b-2xl"
+              >
+                <button
+                  id="ppl-prev-btn"
+                  onclick="changePPLPage(-1)"
+                  class="px-4 py-2 bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 rounded-xl text-xs font-semibold disabled:opacity-50 transition-all shadow-sm"
+                >
+                  Sebelumnya
+                </button>
+                <span
+                  id="ppl-page-info"
+                  class="text-xs text-slate-500 font-medium"
+                  >Halaman 1 dari 1</span
+                >
+                <button
+                  id="ppl-next-btn"
+                  onclick="changePPLPage(1)"
+                  class="px-4 py-2 bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 rounded-xl text-xs font-semibold disabled:opacity-50 transition-all shadow-sm"
+                >
+                  Berikutnya
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- ================= PANEL PML ================= -->
+          <div id="panel-pml" class="hidden space-y-6">
+            <!-- PML Warnings Container -->
+            <div id="pml-warnings-container" class="space-y-3 hidden">
+              <!-- PML Warning Pemeriksaan (PML Rendah) -->
+              <div id="pml-warning-pml-rendah" class="hidden bg-rose-100 border-l-4 border-rose-500 text-rose-700 p-4 rounded-xl shadow-sm flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                  <svg class="h-6 w-6 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                  <div>
+                    <h3 class="font-bold text-sm">Peringatan: Progres Pemeriksaan Rendah (PML Rendah)</h3>
+                    <p class="text-xs">Tim Anda memiliki lebih dari 50 dokumen yang belum diperiksa (Approve/Reject). Harap segera tindaklanjuti!</p>
+                  </div>
+                </div>
+              </div>
+              <!-- PML Warning PPL Draft -->
+              <div id="pml-warning-draft" class="hidden bg-amber-100 border-l-4 border-amber-500 text-amber-800 p-4 rounded-xl shadow-sm flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                  <svg class="h-6 w-6 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                  <div>
+                    <h3 class="font-bold text-sm">Peringatan: Petugas PPL dengan Draft Tinggi</h3>
+                    <p class="text-xs">Ada petugas PPL di bawah pengawasan Anda dengan jumlah dokumen Draft > 20. Harap tindaklanjuti!</p>
+                  </div>
+                </div>
+              </div>
+              <!-- PML Warning PPL Rendah -->
+              <div id="pml-warning-ppl-rendah" class="hidden bg-rose-100 border-l-4 border-rose-500 text-rose-700 p-4 rounded-xl shadow-sm flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                  <svg class="h-6 w-6 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                  <div>
+                    <h3 class="font-bold text-sm">Peringatan: Petugas PPL Progres Rendah</h3>
+                    <p class="text-xs">Ada petugas PPL di bawah pengawasan Anda dengan progres rendah (Hutang >= 28). Harap tindaklanjuti!</p>
+                  </div>
+                </div>
+              </div>
+              <!-- PML Warning PPL Tidak Ditemukan -->
+              <div id="pml-warning-tidak-ditemukan" class="hidden bg-red-100 border-l-4 border-red-500 text-red-700 p-4 rounded-xl shadow-sm flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                  <svg class="h-6 w-6 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                  <div>
+                    <h3 class="font-bold text-sm">Peringatan: Ada PPL dengan >50% Tidak Ditemukan</h3>
+                    <p class="text-xs">Ada petugas PPL di bawah pengawasan Anda dengan dokumen Tidak Ditemukan melebihi 50%. Harap segera tindaklanjuti!</p>
+                  </div>
+                </div>
+              </div>
+              <!-- PML Warning PPL NIK Kosong -->
+              <div id="pml-warning-nik-kosong" class="hidden bg-purple-100 border-l-4 border-purple-500 text-purple-700 p-4 rounded-xl shadow-sm flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                  <svg class="h-6 w-6 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                  <div>
+                    <h3 class="font-bold text-sm">Peringatan: Ada PPL dengan >10 NIK Anggota Keluarga Kosong</h3>
+                    <p class="text-xs">Ada petugas PPL di bawah pengawasan Anda dengan NIK anggota keluarga kosong melebihi 10 dokumen. Harap segera tindaklanjuti!</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- PML Overview Stats Grid -->
+            <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-4">
+              <div
+                class="bg-white rounded-2xl p-5 shadow-md border border-slate-100 flex flex-col items-center justify-center text-center"
+              >
+                <h4
+                  class="text-xs font-semibold text-slate-400 uppercase tracking-wider"
+                >
+                  Anggota PPL
+                </h4>
+                <p
+                  id="pml-stat-ppl"
+                  class="text-3xl font-extrabold text-slate-800 mt-2 font-mono tracking-tight"
+                >
+                  0
+                </p>
+                <p class="text-[10px] text-slate-400 mt-1">
+                  Petugas di bawah pengawasan Anda
+                </p>
+              </div>
+              <div
+                class="bg-white rounded-2xl p-5 shadow-md border border-slate-100 flex flex-col items-center justify-center text-center"
+              >
+                <h4
+                  class="text-xs font-semibold text-slate-400 uppercase tracking-wider"
+                >
+                  Total Beban Tim
+                </h4>
+                <p
+                  id="pml-stat-assignment"
+                  class="text-3xl font-extrabold text-slate-800 mt-2 font-mono tracking-tight"
+                >
+                  0
+                </p>
+                <p class="text-[10px] text-slate-400 mt-1">
+                  Total assignment penugasan tim
+                </p>
+              </div>
+              <div
+                class="bg-white rounded-2xl p-5 shadow-md border border-slate-100 flex flex-col items-center justify-center text-center"
+              >
+                <h4
+                  class="text-xs font-semibold text-slate-400 uppercase tracking-wider"
+                >
+                  Total Realisasi Tim
+                </h4>
+                <p
+                  id="pml-stat-progress"
+                  class="text-3xl font-extrabold text-orange-500 mt-2 font-mono tracking-tight"
+                >
+                  0
+                </p>
+                <p class="text-[10px] text-slate-400 mt-1">Didata</p>
+              </div>
+              <div
+                class="bg-white rounded-2xl p-5 shadow-md border border-slate-100 flex flex-col items-center justify-center text-center"
+              >
+                <h4
+                  class="text-xs font-semibold text-slate-400 uppercase tracking-wider"
+                >
+                  Tidak Ditemukan
+                </h4>
+                <p
+                  id="pml-stat-tidak-ditemukan"
+                  class="text-3xl font-extrabold text-red-600 mt-2 font-mono tracking-tight"
+                >
+                  0
+                </p>
+                <p class="text-[10px] text-slate-400 mt-1">Total Tidak Ditemukan</p>
+              </div>
+              <div
+                class="bg-white rounded-2xl p-5 shadow-md border border-slate-100 flex flex-col items-center justify-center text-center"
+              >
+                <h4
+                  class="text-xs font-semibold text-slate-400 uppercase tracking-wider"
+                >
+                  Persentase Realisasi
+                </h4>
+                <div class="flex items-center justify-center gap-2 mt-2">
+                  <p
+                    id="pml-stat-percentage"
+                    class="text-3xl font-extrabold text-emerald-600 font-mono tracking-tight"
+                  >
+                    0%
+                  </p>
+                </div>
+                <p class="text-[10px] text-slate-400 mt-1">
+                  Kemajuan kumulatif tim pengawasan
+                </p>
+              </div>
+              <div
+                class="bg-white rounded-2xl p-5 shadow-md border border-slate-100 flex flex-col items-center justify-center text-center"
+              >
+                <h4
+                  class="text-xs font-semibold text-slate-400 uppercase tracking-wider"
+                >
+                  Belum Diperiksa
+                </h4>
+                <p
+                  id="pml-stat-unchecked"
+                  class="text-3xl font-extrabold text-rose-500 mt-2 font-mono tracking-tight"
+                >
+                  0
+                </p>
+                <p class="text-[10px] text-slate-400 mt-1">
+                  Approve/Reject tertunda
+                </p>
+              </div>
+              <div
+                class="bg-white rounded-2xl p-5 shadow-md border border-slate-100 flex flex-col items-center justify-center text-center"
+              >
+                <h4
+                  class="text-xs font-semibold text-slate-400 uppercase tracking-wider"
+                >
+                  Peringkat PML
+                </h4>
+                <p
+                  id="pml-stat-rank"
+                  class="text-3xl font-extrabold text-orange-500 mt-2 font-mono tracking-tight"
+                >
+                  -#
+                </p>
+                <p class="text-[10px] text-slate-400 mt-1">
+                  Peringkat Approve+Reject
+                </p>
+              </div>
+              <div
+                class="bg-white rounded-2xl p-5 shadow-md border border-slate-100 flex flex-col items-center justify-center text-center"
+              >
+                <h4
+                  class="text-xs font-semibold text-slate-400 uppercase tracking-wider"
+                >
+                  Peringkat Tim
+                </h4>
+                <p
+                  id="pml-stat-team-rank"
+                  class="text-3xl font-extrabold text-emerald-500 mt-2 font-mono tracking-tight"
+                >
+                  -#
+                </p>
+                <p class="text-[10px] text-slate-400 mt-1">
+                  Skor Tim
+                </p>
+              </div>
+            </div>
+
+            <!-- PPL List Under PML (Cards) -->
+            <div
+              class="bg-white rounded-2xl shadow-md border border-slate-100 overflow-hidden"
+            >
+              <div class="p-6 border-b border-slate-100">
+                <h3 class="text-lg font-bold text-slate-800">
+                  Daftar Petugas PPL di Bawah Pengawasan
+                </h3>
+                <p class="text-xs text-slate-500 mt-1">
+                  Pantau perkembangan target harian seluruh anggota tim Anda
+                </p>
+              </div>
+              <div
+                id="pml-ppl-cards"
+                class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 p-6"
+              >
+                <!-- Loaded dynamically as cards -->
+              </div>
+            </div>
+          </div>
+
+          <!-- ================= PANEL ADMIN ================= -->
+          <div id="panel-admin" class="hidden space-y-6">
+
+            <!-- Filter and Progress Realisasi Container -->
+            <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+              <!-- Filter Cascade -->
+              <div
+                class="lg:col-span-1 bg-white rounded-2xl p-6 shadow-md border border-slate-100 flex flex-col"
+              >
+                <h3
+                  class="text-sm font-bold text-slate-800 mb-4 uppercase tracking-wider flex items-center gap-2"
+                >
+                  <svg
+                    class="h-5 w-5 text-blue-700"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"
+                    ></path>
+                  </svg>
+                  Filter Petugas
+                </h3>
+                <div class="grid grid-cols-1 gap-4 flex-1">
+                  <div>
+                    <label
+                      for="admin-filter-pml"
+                      class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2"
+                      >Pilih Pengawas (PML)</label
+                    >
+                    <select
+                      id="admin-filter-pml"
+                      onchange="onAdminPMLChange()"
+                      class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                    >
+                      <option value="ALL">Semua Tim PML</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label
+                      for="admin-filter-ppl"
+                      class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2"
+                      >Pilih Pencacah (PPL)</label
+                    >
+                    <select
+                      id="admin-filter-ppl"
+                      onchange="onAdminPPLChange()"
+                      class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                    >
+                      <option value="ALL">Semua Petugas PPL</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <!-- Progress Realisasi vs Total Assignment -->
+              <div
+                class="lg:col-span-1 flex flex-col justify-center items-center text-center bg-[#ff7f50] rounded-2xl p-6 shadow-md border border-[#ff7f50] relative overflow-hidden"
+              >
+                <!-- Decorative background bubbles -->
+                <div class="absolute -right-8 -bottom-8 w-28 h-28 bg-white/10 rounded-full pointer-events-none"></div>
+                <div class="absolute -left-6 -top-6 w-20 h-20 bg-white/5 rounded-full pointer-events-none"></div>
+
+                <span
+                  class="text-xs font-bold text-white/80 uppercase tracking-wider mb-1 z-10"
+                  >PROGRES REALISASI</span
+                >
+                <p
+                  id="admin-stat-subtitle"
+                  class="text-sm text-white font-extrabold mb-3 truncate w-full z-10"
+                >
+                  Memuat...
+                </p>
+
+                <div class="flex items-center justify-center gap-2 mb-3 z-10">
+                  <span
+                    id="admin-stat-percentage"
+                    class="text-4xl font-extrabold text-white leading-none font-mono tracking-tight"
+                    >0.00%</span
+                  >
+                </div>
+
+                <p class="text-sm text-white/90 font-bold mb-3 z-10">
+                  (<span id="admin-stat-tersubmit">0</span> / <span id="admin-stat-tersubmit-total">0</span>) Tersubmit
+                </p>
+
+                <div
+                  class="w-full max-w-xs bg-white/20 rounded-full h-2 overflow-hidden mx-auto z-10"
+                >
+                  <div
+                    id="admin-stat-percentage-bar"
+                    class="bg-white h-2 rounded-full"
+                    style="width: 0%"
+                  ></div>
+                </div>
+                <p class="text-[9px] text-white/70 mt-2 text-center w-full max-w-xs mx-auto z-10">
+                  Total Beban:
+                  <span id="admin-stat-total-beban-info" class="font-bold"
+                    >0</span
+                  >
+                </p>
+              </div>
+
+              <!-- Progress Pemeriksaan -->
+              <div
+                class="lg:col-span-1 flex flex-col justify-center items-center text-center bg-[#ff7f50] rounded-2xl p-6 shadow-md border border-[#ff7f50] relative overflow-hidden"
+              >
+                <!-- Decorative background bubbles -->
+                <div class="absolute -right-8 -bottom-8 w-28 h-28 bg-white/10 rounded-full pointer-events-none"></div>
+                <div class="absolute -left-6 -top-6 w-20 h-20 bg-white/5 rounded-full pointer-events-none"></div>
+
+                <span
+                  class="text-xs font-bold text-white/80 uppercase tracking-wider mb-1 z-10"
+                  >PROGRES PEMERIKSAAN</span
+                >
+                <p
+                  id="admin-stat-pemeriksaan-subtitle"
+                  class="text-sm text-white font-extrabold mb-3 truncate w-full z-10"
+                >
+                  PML
+                </p>
+
+                <div class="flex items-center justify-center gap-2 mb-3 z-10">
+                  <span
+                    id="admin-stat-pemeriksaan-percentage"
+                    class="text-4xl font-extrabold text-white leading-none font-mono tracking-tight"
+                    >0.00%</span
+                  >
+                </div>
+
+                <p class="text-sm text-white/90 font-bold mb-3 z-10">
+                  (<span id="admin-stat-diperiksa">0</span> / <span id="admin-stat-diperiksa-total">0</span>) Diperiksa
+                </p>
+
+                <div
+                  class="w-full max-w-xs bg-white/20 rounded-full h-2 overflow-hidden mx-auto z-10"
+                >
+                  <div
+                    id="admin-stat-pemeriksaan-percentage-bar"
+                    class="bg-white h-2 rounded-full"
+                    style="width: 0%"
+                  ></div>
+                </div>
+                <p class="text-[9px] text-white/70 mt-2 text-center w-full max-w-xs mx-auto z-10">
+                  Approve + Reject
+                </p>
+              </div>
+
+              <!-- Target Harian Kumulatif -->
+              <div
+                class="lg:col-span-1 flex flex-col justify-center items-center text-center bg-[#ff7f50] rounded-2xl p-6 shadow-md border border-[#ff7f50] relative overflow-hidden"
+              >
+                <!-- Decorative background bubbles -->
+                <div class="absolute -right-8 -bottom-8 w-28 h-28 bg-white/10 rounded-full pointer-events-none"></div>
+                <div class="absolute -left-6 -top-6 w-20 h-20 bg-white/5 rounded-full pointer-events-none"></div>
+
+                <span
+                  class="text-xs font-bold text-white/80 uppercase tracking-wider mb-1 z-10"
+                  >TARGET KUMULATIF</span
+                >
+                <p
+                  id="admin-stat-target-date"
+                  class="text-sm text-white font-extrabold mb-3 truncate w-full z-10"
+                >
+                  Target per: -
+                </p>
+
+                <div class="flex items-center justify-center gap-2 mb-3 z-10">
+                  <span
+                    id="admin-stat-kumulatif"
+                    class="text-4xl font-extrabold text-white leading-none font-mono tracking-tight"
+                    >0 / 0</span
+                  >
+                </div>
+                <div class="mb-3 z-10">
+                  <div id="admin-target-badge">
+                    <span
+                      class="inline-block text-xs font-bold px-2.5 py-1 rounded-full bg-slate-200 text-slate-600 border border-slate-300"
+                      >Menghitung...</span
+                    >
+                  </div>
+                </div>
+
+                <p class="text-[9px] text-white/70 mt-2 text-center w-full max-w-xs mx-auto z-10">
+                  Tersubmit / Target Kumulatif
+                </p>
+              </div>
+            </div>
+
+            <!-- Admin Stats Cards Grid -->
+            <div class="grid grid-cols-2 lg:grid-cols-7 gap-4">
+              <div
+                class="bg-white rounded-2xl p-4 shadow-md border border-slate-100"
+              >
+                <h4
+                  class="text-xs font-semibold text-slate-400 uppercase tracking-wider"
+                >
+                  Total Beban
+                </h4>
+                <p
+                  id="admin-stat-assignment"
+                  class="text-2xl font-extrabold text-slate-800 mt-2 font-mono tracking-tight"
+                >
+                  0
+                </p>
+              </div>
+              <div
+                class="bg-white rounded-2xl p-4 shadow-md border border-slate-100 bg-blue-50/25"
+              >
+                <h4
+                  class="text-xs font-semibold text-blue-700 uppercase tracking-wider"
+                >
+                  Open
+                </h4>
+                <p
+                  id="admin-stat-open"
+                  class="text-2xl font-extrabold text-blue-700 mt-2 font-mono tracking-tight"
+                >
+                  0
+                </p>
+              </div>
+              <div
+                class="bg-white rounded-2xl p-4 shadow-md border border-slate-100 bg-amber-50/25"
+              >
+                <h4
+                  class="text-xs font-semibold text-amber-700 uppercase tracking-wider"
+                >
+                  Draft
+                </h4>
+                <p
+                  id="admin-stat-draft"
+                  class="text-2xl font-extrabold text-amber-600 mt-2 font-mono tracking-tight"
+                >
+                  0
+                </p>
+              </div>
+              <div
+                class="bg-white rounded-2xl p-4 shadow-md border border-slate-100 bg-indigo-50/25"
+              >
+                <h4
+                  class="text-xs font-semibold text-indigo-700 uppercase tracking-wider"
+                >
+                  Submitted
+                </h4>
+                <p
+                  id="admin-stat-submitted"
+                  class="text-2xl font-extrabold text-indigo-600 mt-2 font-mono tracking-tight"
+                >
+                  0
+                </p>
+              </div>
+              <div
+                class="bg-white rounded-2xl p-4 shadow-md border border-slate-100 bg-emerald-50/25"
+              >
+                <h4
+                  class="text-xs font-semibold text-emerald-700 uppercase tracking-wider"
+                >
+                  Approved
+                </h4>
+                <p
+                  id="admin-stat-approved"
+                  class="text-2xl font-extrabold text-emerald-600 mt-2 font-mono tracking-tight"
+                >
+                  0
+                </p>
+              </div>
+              <div
+                class="bg-white rounded-2xl p-4 shadow-md border border-slate-100 bg-rose-50/25"
+              >
+                <h4
+                  class="text-xs font-semibold text-rose-700 uppercase tracking-wider"
+                >
+                  Rejected
+                </h4>
+                <p
+                  id="admin-stat-rejected"
+                  class="text-2xl font-extrabold text-rose-600 mt-2 font-mono tracking-tight"
+                >
+                  0
+                </p>
+              </div>
+              <div
+                class="bg-white rounded-2xl p-4 shadow-md border border-slate-100 bg-red-50/25"
+              >
+                <h4
+                  class="text-xs font-semibold text-red-700 uppercase tracking-wider"
+                >
+                  Tidak Ditemukan
+                </h4>
+                <p
+                  id="admin-stat-tidak-ditemukan"
+                  class="text-2xl font-extrabold text-red-600 mt-2 font-mono tracking-tight"
+                >
+                  0
+                </p>
+              </div>
+            </div>
+
+            <!-- Action Buttons for Admin -->
+            <div class="flex flex-wrap gap-4 pt-2">
+              <button onclick="showAdminListModal('DRAFT')" class="px-5 py-2.5 bg-amber-100 hover:bg-amber-200 text-amber-800 text-sm font-bold rounded-xl transition-all shadow-sm border border-amber-200 flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="tabler-icon tabler-icon-file-pencil"><path d="M14 3v4a1 1 0 0 0 1 1h4"></path><path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z"></path><path d="M10 18l5 -5a1.414 1.414 0 0 0 -2 -2l-5 5v2h2z"></path></svg>
+                Draft > 20
+              </button>
+              <button onclick="showAdminListModal('HUTANG')" class="px-5 py-2.5 bg-rose-100 hover:bg-rose-200 text-rose-800 text-sm font-bold rounded-xl transition-all shadow-sm border border-rose-200 flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="tabler-icon tabler-icon-trending-down"><path d="M3 7l6 6l4 -4l8 8"></path><path d="M21 10l0 7l-7 0"></path></svg>
+                PPL Progres Rendah
+              </button>
+              <button onclick="showAdminListModal('HUTANG_PML')" class="px-5 py-2.5 bg-orange-100 hover:bg-orange-200 text-orange-800 text-sm font-bold rounded-xl transition-all shadow-sm border border-orange-200 flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="tabler-icon tabler-icon-user-x"><path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0"></path><path d="M6 21v-2a4 4 0 0 1 4 -4h3.5"></path><path d="M22 22l-5 -5"></path><path d="M17 22l5 -5"></path></svg>
+                PML Progres Rendah
+              </button>
+              <button onclick="showAdminListModal('TIDAK_DITEMUKAN')" class="px-5 py-2.5 bg-red-100 hover:bg-red-200 text-red-800 text-sm font-bold rounded-xl transition-all shadow-sm border border-red-200 flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="tabler-icon tabler-icon-alert-triangle"><path d="M12 9v4"></path><path d="M12 17h.01"></path><path d="M5 19h14a2 2 0 0 0 1.84 -2.75L13.74 4a2 2 0 0 0 -3.5 0L3.16 16.25A2 2 0 0 0 5 19z"></path></svg>
+                PPL >50% Tidak Ditemukan
+              </button>
+              <button onclick="showAdminListModal('NIK_KOSONG')" class="px-5 py-2.5 bg-purple-100 hover:bg-purple-200 text-purple-800 text-sm font-bold rounded-xl transition-all shadow-sm border border-purple-200 flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="tabler-icon tabler-icon-id-off"><path d="M8 4h10a2 2 0 0 1 2 2v10m-.586 3.414a2 2 0 0 1 -1.414 .586h-12a2 2 0 0 1 -2 -2v-12c0 -.547 .22 -1.043 .576 -1.405"></path><path d="M9 10a3 3 0 1 0 6 0"></path><path d="M15 16h-6"></path><path d="M3 3l18 18"></path></svg>
+                PPL >10 NIK Kosong
+              </button>
+            </div>
+
+            <!-- Rankings/Leaderboards (3 Columns) -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-6">
+              <!-- Leaderboard PPL -->
+              <div
+                class="bg-white rounded-2xl shadow-md border border-slate-100 p-6"
+              >
+                <h3
+                  class="text-sm font-bold text-slate-800 uppercase tracking-wider mb-4 flex items-center gap-2 text-orange-500"
+                >
+                  <span>🏆</span> Peringkat Petugas PPL
+                </h3>
+                <div
+                  class="space-y-4 max-h-[400px] overflow-y-auto pr-1"
+                  id="admin-leaderboard-ppl"
+                >
+                  <!-- PPL Leaderboard loaded dynamically -->
+                </div>
+              </div>
+
+              <!-- Leaderboard Petugas PML -->
+              <div
+                class="bg-white rounded-2xl shadow-md border border-slate-100 p-6"
+              >
+                <h3
+                  class="text-sm font-bold text-slate-800 uppercase tracking-wider mb-4 flex items-center gap-2 text-blue-900"
+                >
+                  <span>👥</span> Peringkat Petugas PML
+                </h3>
+                <div
+                  class="space-y-4 max-h-[400px] overflow-y-auto pr-1"
+                  id="admin-leaderboard-pml"
+                >
+                  <!-- PML Leaderboard loaded dynamically -->
+                </div>
+              </div>
+
+              <!-- Leaderboard Tim -->
+              <div
+                class="bg-white rounded-2xl shadow-md border border-slate-100 p-6"
+              >
+                <h3
+                  class="text-sm font-bold text-slate-800 uppercase tracking-wider mb-4 flex items-center gap-2 text-emerald-600"
+                >
+                  <span>🌟</span> Peringkat Tim
+                </h3>
+                <div
+                  class="space-y-4 max-h-[400px] overflow-y-auto pr-1"
+                  id="admin-leaderboard-tim"
+                >
+                  <!-- Tim Leaderboard loaded dynamically -->
+                </div>
+              </div>
+            </div>
+
+            <!-- Wilayah Kerja Cards (Full Width) -->
+            <div
+              class="bg-white rounded-2xl shadow-md border border-slate-100 overflow-hidden flex flex-col justify-between mt-6"
+            >
+              <div>
+                <div
+                  class="p-6 border-b border-slate-100 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4"
+                >
+                  <div>
+                    <h3 class="text-lg font-bold text-slate-800">
+                      Rincian Wilayah Sensus
+                    </h3>
+                    <p class="text-xs text-slate-500 mt-1">
+                      Daftar progres spasial per wilayah tugas
+                    </p>
+                  </div>
+                  <div class="w-full sm:w-64">
+                    <input
+                      type="text"
+                      id="admin-search-wilayah"
+                      oninput="filterAdminWilayah()"
+                      placeholder="Cari wilayah SLS..."
+                      class="w-full px-4 py-2 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                    />
+                  </div>
+                </div>
+
+                <!-- Admin Cards Grid Container -->
+                <div
+                  id="admin-cards-container"
+                  class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 p-6"
+                >
+                  <!-- Loaded dynamically as cards -->
+                </div>
+              </div>
+
+              <!-- Admin Card Pagination -->
+              <div
+                class="flex justify-between items-center p-4 bg-slate-50 border-t border-slate-100 rounded-b-2xl"
+              >
+                <button
+                  id="admin-prev-btn"
+                  onclick="changeAdminPage(-1)"
+                  class="px-4 py-2 bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 rounded-xl text-xs font-semibold disabled:opacity-50 transition-all shadow-sm"
+                >
+                  Sebelumnya
+                </button>
+                <span
+                  id="admin-page-info"
+                  class="text-xs text-slate-500 font-medium"
+                  >Halaman 1 dari 1</span
+                >
+                <button
+                  id="admin-next-btn"
+                  onclick="changeAdminPage(1)"
+                  class="px-4 py-2 bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 rounded-xl text-xs font-semibold disabled:opacity-50 transition-all shadow-sm"
+                >
+                  Berikutnya
+                </button>
+              </div>
+            </div>
+          </div>
+        </main>
+      </div>
+
+      <!-- DETAIL WILAYAH MODAL (For PML/Admin viewing PPL detail SLS) -->
+      <div
+        id="modal-detail"
+        class="hidden fixed inset-0 bg-slate-900/80 z-50 flex items-center justify-center p-4"
+      >
+        <div
+          class="bg-white rounded-2xl shadow-2xl w-full max-w-4xl max-h-[85vh] flex flex-col overflow-hidden transform transition-all scale-100"
+        >
+          <!-- Modal Header -->
+          <div
+            class="bg-slate-50 border-b border-slate-100 p-6 text-slate-800 flex justify-between items-center"
+          >
+            <div>
+              <h3 class="text-lg font-bold text-blue-900" id="modal-title">
+                Rincian Wilayah Kerja
+              </h3>
+              <p class="text-xs text-slate-500 mt-1" id="modal-subtitle">
+                Petugas: -
+              </p>
+            </div>
+            <button
+              onclick="closeModal()"
+              class="text-slate-400 hover:text-slate-600 text-2xl font-bold p-2 focus:outline-none leading-none"
+            >
+              &times;
+            </button>
+          </div>
+          <!-- Modal Body (Cards) -->
+          <div
+            id="modal-cards-container"
+            class="overflow-y-auto p-6 flex-grow grid grid-cols-1 md:grid-cols-2 gap-4"
+          >
+            <!-- Dynamically filled as cards -->
+          </div>
+          <!-- Modal Footer -->
+          <div
+            class="bg-slate-50 p-4 border-t border-slate-100 flex justify-end"
+          >
+            <button
+              onclick="closeModal()"
+              class="bg-blue-900 hover:bg-indigo-950 text-white font-semibold py-2 px-6 rounded-xl transition-all"
+            >
+              Tutup
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Modal Admin Alert -->
+      <div
+        id="modal-admin-alert"
+        class="hidden fixed inset-0 bg-slate-900/80 z-50 flex items-center justify-center p-4"
+      >
+        <div
+          class="bg-white rounded-2xl shadow-2xl w-full max-w-4xl max-h-[85vh] flex flex-col overflow-hidden transform scale-95 transition-all"
+        >
+          <!-- Modal Header -->
+          <div
+            class="bg-slate-50 border-b border-slate-100 p-6 text-slate-800 flex justify-between items-center"
+          >
+            <div>
+              <h3 class="text-lg font-bold text-blue-900" id="admin-alert-title">
+                Peringatan Petugas
+              </h3>
+            </div>
+            <button
+              onclick="closeAdminAlertModal()"
+              class="text-slate-400 hover:text-slate-600 text-2xl font-bold p-2 focus:outline-none leading-none"
+            >
+              &times;
+            </button>
+          </div>
+          <!-- Modal Body (List) -->
+          <div
+            class="overflow-y-auto p-6 flex-grow grid grid-cols-1 sm:grid-cols-2 gap-4"
+            id="admin-alert-container"
+          >
+            <!-- Loaded dynamically -->
+          </div>
+          <!-- Modal Footer -->
+          <div
+            class="bg-slate-50 p-4 border-t border-slate-100 flex justify-end"
+          >
+            <button
+              onclick="closeAdminAlertModal()"
+              class="bg-slate-800 hover:bg-slate-900 text-white font-semibold py-2 px-6 rounded-xl transition-all"
+            >
+              Tutup
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <footer
+        class="bg-white border-t border-slate-100 py-4 text-center text-xs text-slate-400 mt-auto"
+      >
+        <p class="text-xs text-slate-500">
+          &copy; 2026 Badan Pusat Statistik Kabupaten <span class="kabupaten-name">Kepahiang</span>. All Rights
+          Reserved.
+        </p>
+      </footer>
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+      // ================= KONFIGURASI =================
+      const CONFIG = {
+        NAMA_KABUPATEN: "Kepahiang", // Ganti dengan nama kabupaten Anda
+        TARGET_PER_HARI_PPL: 7 // Target jumlah assignment harian per PPL
+      };
+
+      const formatNumber = (num) => num.toLocaleString('id-ID');
+      const formatPercent = (num) => num.toLocaleString('id-ID', { minimumFractionDigits: 1, maximumFractionDigits: 2 });
+
+      document.addEventListener("DOMContentLoaded", () => {
+        document.title = `Dashboard Progres SE2026 BPS ${CONFIG.NAMA_KABUPATEN}`;
+        document.querySelectorAll(".kabupaten-name").forEach(el => {
+          el.textContent = CONFIG.NAMA_KABUPATEN;
+        });
+        document.querySelectorAll(".target-per-hari-text").forEach(el => {
+          el.textContent = CONFIG.TARGET_PER_HARI_PPL;
+        });
+      });
+      // ===============================================
+
+      // State Application
+      let database = [];
+      let currentUser = null; // { role, name, emailOrCode }
+      let activeLoginTab = "petugas";
+      let waitingForData = false;
+      let lastUpdateDateStr = "";
+
+      // Pagination States (10 items / page)
+      const pageSize = 8;
+      let pplCurrentPage = 1;
+      let adminCurrentPage = 1;
+
+      window.onload = function () {
+        refreshData();
+      };
+
+      function refreshData() {
+        const syncIcon = document.getElementById("sync-icon");
+        if (syncIcon) syncIcon.classList.add("animate-spin");
+
+        google.script.run
+          .withSuccessHandler(function (response) {
+            if (response.success) {
+              database = response.data;
+              lastUpdateDateStr = response.lastUpdateDate || "-";
+              
+              const lastUpdateEl = document.getElementById("last-update-date");
+              if (lastUpdateEl) {
+                lastUpdateEl.textContent = lastUpdateDateStr;
+              }
+
+              // Jika ada user aktif, re-render dashboard dengan data baru
+              if (currentUser) {
+                renderDashboard();
+              }
+
+              if (waitingForData) {
+                waitingForData = false;
+                handleLogin();
+              }
+            } else {
+              showError("Gagal mengambil data: " + response.message);
+              if (waitingForData) {
+                waitingForData = false;
+                showLoading(false);
+              }
+            }
+            if (!waitingForData) {
+              showLoading(false);
+            }
+            if (syncIcon) syncIcon.classList.remove("animate-spin");
+          })
+          .withFailureHandler(function (err) {
+            showError("Gagal terhubung dengan server: " + err.toString());
+            waitingForData = false;
+            showLoading(false);
+            if (syncIcon) syncIcon.classList.remove("animate-spin");
+          })
+          .getSheetData();
+      }
+
+      function showLoading(status) {
+        const loader = document.getElementById("loading");
+        if (status) {
+          loader.classList.remove("hidden");
+          loader.classList.add("flex");
+        } else {
+          loader.classList.add("hidden");
+          loader.classList.remove("flex");
+        }
+      }
+
+      function showError(msg) {
+        const box = document.getElementById("alert-box");
+        const message = document.getElementById("alert-message");
+        message.textContent = msg;
+        box.classList.remove("hidden");
+        setTimeout(() => {
+          closeAlert();
+        }, 5000);
+      }
+
+      function closeAlert() {
+        document.getElementById("alert-box").classList.add("hidden");
+      }
+
+      // Login Tab Controller
+      function switchLoginTab(tab) {
+        activeLoginTab = tab;
+        const btnPetugas = document.getElementById("btn-tab-petugas");
+        const btnAdmin = document.getElementById("btn-tab-admin");
+        const formPetugas = document.getElementById("form-petugas");
+        const formAdmin = document.getElementById("form-admin");
+
+        if (tab === "petugas") {
+          btnPetugas.className =
+            "py-2.5 text-sm font-medium rounded-lg transition-all bg-white text-blue-900 shadow-sm";
+          btnAdmin.className =
+            "py-2.5 text-sm font-medium rounded-lg transition-all text-slate-600 hover:text-slate-900";
+          formPetugas.classList.remove("hidden");
+          formAdmin.classList.add("hidden");
+        } else {
+          btnAdmin.className =
+            "py-2.5 text-sm font-medium rounded-lg transition-all bg-white text-blue-900 shadow-sm";
+          btnPetugas.className =
+            "py-2.5 text-sm font-medium rounded-lg transition-all text-slate-600 hover:text-slate-900";
+          formAdmin.classList.remove("hidden");
+          formPetugas.classList.add("hidden");
+        }
+      }
+
+      // Handle Login authentication
+      function handleLogin() {
+        if (activeLoginTab === "petugas") {
+          const emailInput = document
+            .getElementById("input-email")
+            .value.trim()
+            .toLowerCase();
+          if (!emailInput) {
+            showError("Harap masukkan email terlebih dahulu.");
+            return;
+          }
+
+          if (database.length === 0) {
+            waitingForData = true;
+            showLoading(true);
+            return;
+          }
+
+          // Cari di database apakah sebagai PPL
+          const pplMatches = database.filter((r) => r.emailPpl === emailInput);
+          if (pplMatches.length > 0) {
+            currentUser = {
+              role: "PPL",
+              name: pplMatches[0].pplName,
+              emailOrCode: emailInput,
+            };
+            transitionToDashboard();
+            return;
+          }
+
+          // Cari di database apakah sebagai PML
+          const pmlMatches = database.filter((r) => r.emailPml === emailInput);
+          if (pmlMatches.length > 0) {
+            currentUser = {
+              role: "PML",
+              name: pmlMatches[0].pmlName,
+              emailOrCode: emailInput,
+            };
+            transitionToDashboard();
+            return;
+          }
+
+          showLoading(false);
+          showError(
+            "Email tidak terdaftar sebagai PPL atau PML. Pastikan penulisan sudah benar.",
+          );
+        } else {
+          // Admin login
+          const codeInput = document.getElementById("input-code").value.trim();
+          if (!codeInput) {
+            showError("Harap masukkan kode akses terlebih dahulu.");
+            return;
+          }
+          if (database.length === 0) {
+            waitingForData = true;
+            showLoading(true);
+            return;
+          }
+          if (codeInput === "admin1708") {
+            currentUser = {
+              role: "Admin",
+              name: "Administrator",
+              emailOrCode: "admin1708",
+            };
+            transitionToDashboard();
+          } else {
+            showError("Kode akses admin salah. Silakan coba lagi.");
+          }
+        }
+      }
+
+      function transitionToDashboard() {
+        showLoading(true);
+        document.getElementById("view-login").classList.add("hidden");
+        document.getElementById("view-dashboard").classList.remove("hidden");
+
+        // Update Navbar User Info
+        document.getElementById("nav-user-name").textContent = currentUser.name;
+        document.getElementById("nav-user-role").textContent = currentUser.role;
+        document.getElementById("welcome-message").textContent =
+          `Selamat Datang, ${currentUser.name}!`;
+
+        // Setup Evaluasi Kemarin Info
+        const startDate = new Date("2026-06-15T00:00:00");
+        let today = new Date();
+        today.setHours(0, 0, 0, 0);
+        if (today < startDate || today > new Date("2026-07-31T00:00:00")) {
+          today = new Date("2026-06-23T00:00:00");
+        }
+        const diffTime = today - startDate;
+        const daysElapsed = Math.round(diffTime / (1000 * 60 * 60 * 24)) + 1;
+        
+        const yesterday = new Date(today);
+        yesterday.setDate(yesterday.getDate() - 1);
+        const yesterdayStr = yesterday.toLocaleDateString("id-ID", {
+          day: "numeric",
+          month: "long",
+          year: "numeric",
+        });
+        
+        const targetCumulativeYesterday = (daysElapsed > 1 ? daysElapsed - 1 : 1) * CONFIG.TARGET_PER_HARI_PPL;
+        const hariStr = daysElapsed > 1 ? `Hari ke-${daysElapsed - 1}` : `Hari ke-1`;
+        
+        document.getElementById("header-kemarin-hari").textContent = hariStr;
+        document.getElementById("header-kemarin-tanggal").textContent = yesterdayStr;
+        document.getElementById("header-kemarin-target").textContent = targetCumulativeYesterday;
+
+        // Reset Halaman Pagination
+        pplCurrentPage = 1;
+        adminCurrentPage = 1;
+
+        renderDashboard();
+
+        // Loading dimatikan setelah data siap (atau setelah timeout jika data sudah ada)
+        if (database.length > 0) {
+          setTimeout(() => showLoading(false), 600);
+        }
+        // Jika data belum siap, showLoading(false) akan dipanggil oleh callback refreshData
+      }
+
+      function handleLogout() {
+        currentUser = null;
+        document.getElementById("view-dashboard").classList.add("hidden");
+        document.getElementById("view-login").classList.remove("hidden");
+        // Clear inputs
+        document.getElementById("input-email").value = "";
+        document.getElementById("input-code").value = "";
+      }
+
+      // ROUTER RENDERER UTAMA DASHBOARD
+      function renderDashboard() {
+        // Sembunyikan semua panel dulu
+        document.getElementById("panel-ppl").classList.add("hidden");
+        document.getElementById("panel-pml").classList.add("hidden");
+        document.getElementById("panel-admin").classList.add("hidden");
+
+        if (currentUser.role === "PPL") {
+          renderPPLDashboard();
+        } else if (currentUser.role === "PML") {
+          renderPMLDashboard();
+        } else if (currentUser.role === "Admin") {
+          renderAdminDashboard();
+        }
+      }
+
+      // ================= IMPLEMENTASI PPL DASHBOARD =================
+      let currentPPLWilayahData = [];
+
+      function renderPPLDashboard() {
+        document.getElementById("panel-ppl").classList.remove("hidden");
+
+        // Filter wilayah tugas PPL aktif
+        currentPPLWilayahData = database.filter(
+          (r) => r.emailPpl === currentUser.emailOrCode,
+        );
+
+        // Hitung aggregasi statistik
+        let totalAssignment = 0;
+        let totalOpen = 0;
+        let totalDraft = 0;
+        let totalSubmittedPencacah = 0;
+        let totalSubmittedRespondent = 0;
+        let totalApproved = 0;
+        let totalRejected = 0;
+        let totalTidakDitemukan = 0;
+        let totalNikKosong = 0;
+
+        currentPPLWilayahData.forEach((row) => {
+          totalAssignment += row.totalSekarang;
+          totalOpen += row.open;
+          totalDraft += row.draft;
+          totalSubmittedPencacah += row.submittedPencacah;
+          totalSubmittedRespondent += row.submittedRespondent;
+          totalApproved += row.approved;
+          totalRejected += row.rejected;
+          totalTidakDitemukan += (row.tidakDitemukan || 0);
+          totalNikKosong += (row.nikKosong || 0);
+        });
+
+        const totalProgress =
+          totalSubmittedPencacah +
+          totalSubmittedRespondent +
+          totalApproved +
+          totalRejected;
+
+        // Update basic cards
+        document.getElementById("ppl-total-tidak-ditemukan").textContent =
+          totalTidakDitemukan;
+        document.getElementById("ppl-total-nik-kosong").textContent =
+          totalNikKosong;
+        document.getElementById("ppl-total-assignment").textContent =
+          totalAssignment;
+        document.getElementById("ppl-progress-total").innerHTML =
+          `${totalProgress} <span class="text-sm text-slate-400 font-medium">/ ${totalAssignment} Assignment</span>`;
+
+        // Update ring progress
+        const percent =
+          totalAssignment > 0
+            ? ((totalProgress / totalAssignment) * 100).toFixed(2)
+            : "0.00";
+        document.getElementById("ppl-progress-percent").textContent =
+          `${percent}%`;
+
+        const strokeDashoffset = 238.76 - (238.76 * percent) / 100;
+
+        // Hitung peringkat PPL
+        const pplScores = {};
+        database.forEach((row) => {
+          const key = row.emailPpl;
+          if (!key) return;
+          if (!pplScores[key]) {
+            pplScores[key] = { email: row.emailPpl, progress: 0 };
+          }
+          pplScores[key].progress +=
+            (row.submittedPencacah +
+            row.submittedRespondent +
+            row.approved +
+            row.rejected) -
+            (row.tidakDitemukan || 0);
+        });
+        const pplSorted = Object.values(pplScores).sort(
+          (a, b) => b.progress - a.progress,
+        );
+        const myRank =
+          pplSorted.findIndex((p) => p.email === currentUser.emailOrCode) + 1;
+        document.getElementById("ppl-rank").textContent =
+          `#${myRank} / ${pplSorted.length}`;
+        document
+          .getElementById("ppl-progress-circle")
+          .setAttribute("stroke-dashoffset", strokeDashoffset);
+
+        // Hitung Evaluasi Target Harian
+        // Sensus mulai 15 Juni 2026.
+        const startDate = new Date("2026-06-15T00:00:00");
+        let today = new Date();
+        today.setHours(0, 0, 0, 0);
+        // Simulasi/Lock target jika tanggal melebihi batas demo
+        if (today < startDate || today > new Date("2026-07-31T00:00:00")) {
+          today = new Date("2026-06-23T00:00:00"); // Gunakan tanggal referensi sistem (Hari ke-9)
+        }
+
+        const diffTime = today - startDate;
+        const daysElapsed = Math.round(diffTime / (1000 * 60 * 60 * 24)) + 1;
+
+        const targetBadge = document.getElementById("ppl-target-badge");
+        const targetAdvice = document.getElementById("ppl-target-advice");
+
+        if (daysElapsed > 1) {
+          const targetCumulativeYesterday = (daysElapsed - 1) * CONFIG.TARGET_PER_HARI_PPL;
+          const targetCumulativeToday = daysElapsed * CONFIG.TARGET_PER_HARI_PPL;
+
+          if (totalProgress >= targetCumulativeYesterday) {
+            targetBadge.className =
+              "inline-block text-xs font-bold px-2.5 py-1 rounded-full mb-4 bg-emerald-100 text-emerald-800 border border-emerald-300";
+            targetBadge.textContent = "Mencapai Target ✅";
+            targetAdvice.innerHTML = `Hari ini adalah <strong>Hari Ke-${daysElapsed}</strong>. Progres kumulatif Anda kemarin terkumpul <strong>${totalProgress} assignment</strong> (melampaui target kemarin: ${targetCumulativeYesterday} assignment). <br><span class="text-emerald-600 font-bold block mt-2">Keren, semangat yok hari ini tambah 7 target lagi ya! :)</span>`;
+          } else {
+            const shortageForToday = targetCumulativeToday - totalProgress;
+            targetBadge.className =
+              "inline-block text-xs font-bold px-2.5 py-1 rounded-full mb-4 bg-rose-100 text-rose-800 border border-rose-300";
+            targetBadge.textContent = "Belum Capai Target ⚠️";
+            targetAdvice.innerHTML = `Hari ini adalah <strong>Hari Ke-${daysElapsed}</strong>. Progres kumulatif Anda kemarin terkumpul <strong>${totalProgress} assignment</strong> (di bawah target minimal kemarin: ${targetCumulativeYesterday} assignment). <br><span class="text-rose-600 font-bold block mt-2">Waduh, kamu harus submit minimal ${shortageForToday} assignment hari ini biar ngejar ketertinggalan target kumulatif!</span>`;
+          }
+        } else if (daysElapsed === 1) {
+          targetBadge.className =
+            "inline-block text-xs font-bold px-2.5 py-1 rounded-full mb-4 bg-blue-100 text-blue-800 border border-blue-300";
+          targetBadge.textContent = "Hari Pertama Sensus 🚀";
+          targetAdvice.textContent =
+            "Sensus Ekonomi 2026 dimulai hari ini! Target harian Anda adalah 7 assignment terkumpul. Tetap semangat dan jaga kualitas data!";
+        } else {
+          targetBadge.className =
+            "inline-block text-xs font-bold px-2.5 py-1 rounded-full mb-4 bg-slate-100 text-slate-800 border border-slate-300";
+          targetBadge.textContent = "Belum Dimulai";
+          targetAdvice.textContent =
+            "Pencacahan Sensus Ekonomi 2026 baru akan dimulai pada tanggal 15 Juni 2026.";
+        }
+
+        // Tampilkan Peringatan PPL jika memenuhi kriteria
+        const showDraftWarning = totalDraft > 20;
+        let showPPLRendahWarning = false;
+        if (daysElapsed > 1) {
+           const targetCumulativeYesterday = (daysElapsed - 1) * CONFIG.TARGET_PER_HARI_PPL;
+           showPPLRendahWarning = (targetCumulativeYesterday - totalProgress) >= 28;
+        }
+        const showTDWarning = totalProgress > 0 && (totalTidakDitemukan / totalProgress) > 0.50;
+        const showNikKosongWarning = totalNikKosong > 10;
+
+        document.getElementById("ppl-warning-draft").classList.toggle("hidden", !showDraftWarning);
+        document.getElementById("ppl-warning-ppl-rendah").classList.toggle("hidden", !showPPLRendahWarning);
+        document.getElementById("ppl-warning-tidak-ditemukan").classList.toggle("hidden", !showTDWarning);
+        document.getElementById("ppl-warning-nik-kosong").classList.toggle("hidden", !showNikKosongWarning);
+
+        const hasAnyWarning = showDraftWarning || showPPLRendahWarning || showTDWarning || showNikKosongWarning;
+        document.getElementById("ppl-warnings-container").classList.toggle("hidden", !hasAnyWarning);
+
+        // Render PPL Wilayah Cards
+        displayPPLWilayahCards(currentPPLWilayahData);
+      }
+
+      // Render PPL wilayah dalam format CARD GRID dengan PAGINATION
+      function displayPPLWilayahCards(dataList) {
+        const container = document.getElementById("ppl-cards-container");
+        container.innerHTML = "";
+
+        if (dataList.length === 0) {
+          container.innerHTML = `<div class="col-span-full text-center py-12 text-slate-400">Tidak ada wilayah kerja yang sesuai kata kunci.</div>`;
+          document.getElementById("ppl-page-info").textContent =
+            "Halaman 0 dari 0";
+          document.getElementById("ppl-prev-btn").disabled = true;
+          document.getElementById("ppl-next-btn").disabled = true;
+          return;
+        }
+
+        const totalPages = Math.ceil(dataList.length / pageSize);
+        if (pplCurrentPage > totalPages) pplCurrentPage = totalPages || 1;
+
+        const start = (pplCurrentPage - 1) * pageSize;
+        const end = start + pageSize;
+        const paginatedList = dataList.slice(start, end);
+
+        paginatedList.forEach((row) => {
+          const submitted = row.submittedPencacah + row.submittedRespondent;
+          const totalProgress =
+            row.submittedPencacah +
+            row.submittedRespondent +
+            row.approved +
+            row.rejected;
+          const percentage =
+            row.totalSekarang > 0
+              ? ((totalProgress / row.totalSekarang) * 100).toFixed(2)
+              : "0.00";
+
+          const isHighTD = totalProgress > 0 && ((row.tidakDitemukan || 0) / totalProgress) > 0.50;
+          const isHighNIK = (row.nikKosong || 0) > 10;
+          const cardClass = (isHighTD || isHighNIK)
+            ? "bg-red-50/15 p-5 rounded-2xl shadow-sm border-2 border-red-500 flex flex-col justify-between hover:shadow-md transition-all relative overflow-hidden"
+            : "bg-white p-5 rounded-2xl shadow-sm border border-slate-100 flex flex-col justify-between hover:shadow-md transition-all";
+
+          const card = document.createElement("div");
+          card.className = cardClass;
+          
+          let badgesHtml = "";
+          if (isHighTD) {
+            badgesHtml += `<span class="bg-red-100 text-red-800 text-[9px] font-extrabold px-1.5 py-0.5 rounded-full shrink-0 border border-red-300">⚠️ >50% TD</span>`;
+          }
+          if (isHighNIK) {
+            badgesHtml += `<span class="bg-purple-100 text-purple-800 text-[9px] font-extrabold px-1.5 py-0.5 rounded-full shrink-0 border border-purple-300">⚠️ NIK Kosong > 10</span>`;
+          }
+
+          card.innerHTML = `
+          <div>
+            <div class="flex justify-between items-start gap-2 mb-2">
+              <h4 class="font-bold text-slate-800 text-sm">${row.wilayah}</h4>
+              <div class="flex items-center gap-1 shrink-0 flex-wrap justify-end">
+                ${badgesHtml}
+                <span class="bg-emerald-100 text-emerald-800 text-xs font-bold px-2 py-0.5 rounded-full shrink-0">${formatPercent(parseFloat(percentage))}%</span>
+              </div>
+            </div>
+            <div class="w-full bg-slate-100 rounded-full h-1 overflow-hidden mb-4">
+              <div class="bg-emerald-500 h-1 rounded-full" style="width: ${percentage}%"></div>
+            </div>
+            <div class="grid grid-cols-2 gap-2 text-center text-xs">
+              <div class="bg-slate-50 p-2 rounded-lg">
+                <span class="text-slate-400 block mb-0.5 text-[10px] font-semibold uppercase">Total Beban</span>
+                <span class="font-bold text-slate-700 text-sm">${formatNumber(row.totalSekarang)}</span>
+              </div>
+              <div class="bg-blue-50 p-2 rounded-lg">
+                <span class="text-blue-500 block mb-0.5 text-[10px] font-semibold uppercase">Progres</span>
+                <span class="font-bold text-blue-700 text-sm">${formatNumber(totalProgress)}</span>
+              </div>
+              <div class="bg-indigo-50 p-2 rounded-lg col-span-2 flex justify-around">
+                <div>
+                  <span class="text-indigo-500 block text-[9px] font-semibold uppercase mb-0.5">Sub</span>
+                  <span class="font-bold text-indigo-700 text-xs">${formatNumber(submitted)}</span>
+                </div>
+                <div>
+                  <span class="text-emerald-500 block text-[9px] font-semibold uppercase mb-0.5">App</span>
+                  <span class="font-bold text-emerald-700 text-xs">${formatNumber(row.approved)}</span>
+                </div>
+                <div>
+                  <span class="text-rose-500 block text-[9px] font-semibold uppercase mb-0.5">Rej</span>
+                  <span class="font-bold text-rose-700 text-xs">${formatNumber(row.rejected)}</span>
+                </div>
+              </div>
+              <div class="bg-slate-50 p-2 rounded-lg col-span-2 flex justify-between items-center px-4">
+                <span class="text-slate-500 text-[10px] font-bold uppercase">Tidak Ditemukan</span>
+                <span class="font-bold text-slate-700 text-sm">${formatNumber(row.tidakDitemukan || 0)}</span>
+              </div>
+              <div class="bg-purple-50 p-2 rounded-lg col-span-2 flex justify-between items-center px-4">
+                <span class="text-purple-700 text-[10px] font-bold uppercase">NIK Kosong</span>
+                <span class="font-bold text-purple-800 text-sm">${formatNumber(row.nikKosong || 0)}</span>
+              </div>
+            </div>
+          </div>
+        `;
+          container.appendChild(card);
+        });
+
+        document.getElementById("ppl-page-info").textContent =
+          `Halaman ${pplCurrentPage} dari ${totalPages}`;
+        document.getElementById("ppl-prev-btn").disabled = pplCurrentPage === 1;
+        document.getElementById("ppl-next-btn").disabled =
+          pplCurrentPage === totalPages;
+      }
+
+      function changePPLPage(direction) {
+        pplCurrentPage += direction;
+        filterPPLWilayah();
+      }
+
+      function filterPPLWilayah() {
+        const keyword = document
+          .getElementById("ppl-search-wilayah")
+          .value.toLowerCase()
+          .trim();
+        const filtered = currentPPLWilayahData.filter((r) =>
+          r.wilayah.toLowerCase().includes(keyword),
+        );
+        displayPPLWilayahCards(filtered);
+      }
+
+      // ================= IMPLEMENTASI PML DASHBOARD =================
+      let currentPMLPPLList = [];
+
+      function renderPMLDashboard() {
+        document.getElementById("panel-pml").classList.remove("hidden");
+
+        // Ambil seluruh baris yang berada di bawah pengawasan PML aktif
+        const myTeamData = database.filter(
+          (r) => r.emailPml === currentUser.emailOrCode,
+        );
+
+        // Kumpulkan keunikan PPL di bawah PML ini
+        const pplMap = {};
+        myTeamData.forEach((row) => {
+          if (!pplMap[row.emailPpl]) {
+            pplMap[row.emailPpl] = {
+              name: row.pplName,
+              email: row.emailPpl,
+              totalAssignment: 0,
+              open: 0,
+              draft: 0,
+              submittedPencacah: 0,
+              submittedRespondent: 0,
+              approved: 0,
+              rejected: 0,
+              tidakDitemukan: 0,
+              nikKosong: 0,
+              rawRows: [],
+            };
+          }
+          pplMap[row.emailPpl].totalAssignment += row.totalSekarang;
+          pplMap[row.emailPpl].open += row.open;
+          pplMap[row.emailPpl].draft += row.draft;
+          pplMap[row.emailPpl].submittedPencacah += row.submittedPencacah;
+          pplMap[row.emailPpl].submittedRespondent += row.submittedRespondent;
+          pplMap[row.emailPpl].approved += row.approved;
+          pplMap[row.emailPpl].rejected += row.rejected;
+          pplMap[row.emailPpl].tidakDitemukan += (row.tidakDitemukan || 0);
+          pplMap[row.emailPpl].nikKosong += (row.nikKosong || 0);
+          pplMap[row.emailPpl].rawRows.push(row);
+        });
+
+        currentPMLPPLList = Object.values(pplMap);
+
+        // Hitung aggregasi total pengawasan PML
+        let teamAssignment = 0;
+        let teamProgress = 0;
+        let teamSubmittedUnchecked = 0;
+        let teamTidakDitemukan = 0;
+
+        currentPMLPPLList.forEach((ppl) => {
+          teamAssignment += ppl.totalAssignment;
+          teamProgress +=
+            (ppl.submittedPencacah +
+            ppl.submittedRespondent +
+            ppl.approved +
+            ppl.rejected) -
+            (ppl.tidakDitemukan || 0);
+          teamSubmittedUnchecked += ppl.submittedPencacah + ppl.submittedRespondent;
+          teamTidakDitemukan += (ppl.tidakDitemukan || 0);
+        });
+
+        const teamPercentage =
+          teamAssignment > 0
+            ? ((teamProgress / teamAssignment) * 100).toFixed(2)
+            : "0.00";
+
+        const startDate = new Date(CONFIG.START_DATE);
+        const today = new Date();
+        const diffTime = today - startDate;
+        const daysElapsed = Math.round(diffTime / (1000 * 60 * 60 * 24)) + 1;
+        const targetCumulativeYesterday = (daysElapsed > 1 ? daysElapsed - 1 : 1) * CONFIG.TARGET_PER_HARI_PPL;
+
+        const showPMLRendah = teamSubmittedUnchecked > 50;
+        const showDraft = currentPMLPPLList.some(ppl => ppl.draft > 20);
+        const showPPLRendah = currentPMLPPLList.some(ppl => {
+          const pureProgress = ppl.submittedPencacah + ppl.submittedRespondent + ppl.approved + ppl.rejected;
+          return daysElapsed > 1 && (targetCumulativeYesterday - pureProgress) >= 28;
+        });
+        const showTidakDitemukan = currentPMLPPLList.some(ppl => {
+          const pureProgress = ppl.submittedPencacah + ppl.submittedRespondent + ppl.approved + ppl.rejected;
+          return pureProgress > 0 && (ppl.tidakDitemukan / pureProgress) > 0.50;
+        });
+        const showNikKosong = currentPMLPPLList.some(ppl => (ppl.nikKosong || 0) > 10);
+
+        document.getElementById("pml-warning-pml-rendah").classList.toggle("hidden", !showPMLRendah);
+        document.getElementById("pml-warning-draft").classList.toggle("hidden", !showDraft);
+        document.getElementById("pml-warning-ppl-rendah").classList.toggle("hidden", !showPPLRendah);
+        document.getElementById("pml-warning-tidak-ditemukan").classList.toggle("hidden", !showTidakDitemukan);
+        document.getElementById("pml-warning-nik-kosong").classList.toggle("hidden", !showNikKosong);
+
+        const hasAnyPMLWarning = showPMLRendah || showDraft || showPPLRendah || showTidakDitemukan || showNikKosong;
+        document.getElementById("pml-warnings-container").classList.toggle("hidden", !hasAnyPMLWarning);
+
+        document.getElementById("pml-stat-ppl").textContent =
+          currentPMLPPLList.length;
+        document.getElementById("pml-stat-assignment").textContent = formatNumber(teamAssignment);
+        document.getElementById("pml-stat-progress").textContent = formatNumber(teamProgress);
+        document.getElementById("pml-stat-tidak-ditemukan").textContent = formatNumber(teamTidakDitemukan);
+        document.getElementById("pml-stat-percentage").textContent = formatPercent(parseFloat(teamPercentage)) + "%";
+        document.getElementById("pml-stat-unchecked").textContent = formatNumber(teamSubmittedUnchecked);
+
+        // Hitung peringkat PML & peringkat Tim
+        const pmlScores = {};
+        database.forEach((row) => {
+          const key = row.pmlName;
+          if (!key) return;
+          if (!pmlScores[key]) {
+            pmlScores[key] = { name: row.pmlName, approvedRejected: 0, totalAssignment: 0, progress: 0 };
+          }
+          pmlScores[key].approvedRejected += row.approved + row.rejected;
+          pmlScores[key].totalAssignment += row.totalSekarang;
+          pmlScores[key].progress +=
+            (row.submittedPencacah +
+            row.submittedRespondent +
+            row.approved +
+            row.rejected) -
+            (row.tidakDitemukan || 0);
+        });
+        
+        // Peringkat PML (Approve + Reject)
+        const pmlListSorted = Object.values(pmlScores).sort((a, b) => b.approvedRejected - a.approvedRejected);
+        let myRank = pmlListSorted.findIndex(p => p.name === currentUser.name) + 1;
+        document.getElementById("pml-stat-rank").textContent = myRank > 0 ? `#${myRank}` : "-#";
+
+        // Peringkat Tim (Skor)
+        const timListSorted = Object.values(pmlScores).map(pml => {
+          const pplPercent = pml.totalAssignment > 0 ? (pml.progress / pml.totalAssignment) * 100 : 0;
+          const pmlPercent = pml.totalAssignment > 0 ? (pml.approvedRejected / pml.totalAssignment) * 100 : 0;
+          const score = (pplPercent + pmlPercent) / 2;
+          return { ...pml, score };
+        }).sort((a, b) => b.score - a.score);
+        
+        let myTeamRank = timListSorted.findIndex(p => p.name === currentUser.name) + 1;
+        document.getElementById("pml-stat-team-rank").textContent = myTeamRank > 0 ? `#${myTeamRank}` : "-#";
+
+        // Hitung Peringkat Global PPL
+        const globalPplScores = {};
+        database.forEach((row) => {
+          const key = row.emailPpl;
+          if (!key) return;
+          if (!globalPplScores[key]) {
+            globalPplScores[key] = { progress: 0 };
+          }
+          globalPplScores[key].progress +=
+            (row.submittedPencacah +
+            row.submittedRespondent +
+            row.approved +
+            row.rejected) -
+            (row.tidakDitemukan || 0);
+        });
+
+        const globalPplSorted = Object.entries(globalPplScores).sort((a, b) => b[1].progress - a[1].progress);
+        const globalPplRanks = {};
+        globalPplSorted.forEach((item, index) => {
+           globalPplRanks[item[0]] = index + 1; // map email to rank
+        });
+
+        // Render PPL Cards
+        const cardContainer = document.getElementById("pml-ppl-cards");
+        cardContainer.innerHTML = "";
+
+        if (currentPMLPPLList.length === 0) {
+          cardContainer.innerHTML = `<div class="col-span-full text-center py-12 text-slate-400">Tidak ada PPL di bawah pengawasan Anda.</div>`;
+          return;
+        }
+
+        currentPMLPPLList.sort((a, b) => {
+          const progA =
+            (a.submittedPencacah +
+            a.submittedRespondent +
+            a.approved +
+            a.rejected) -
+            (a.tidakDitemukan || 0);
+          const progB =
+            (b.submittedPencacah +
+            b.submittedRespondent +
+            b.approved +
+            b.rejected) -
+            (b.tidakDitemukan || 0);
+          return progB - progA;
+        });
+
+        currentPMLPPLList.forEach((ppl) => {
+          const progressVal =
+            ppl.submittedPencacah +
+            ppl.submittedRespondent +
+            ppl.approved +
+            ppl.rejected;
+          const pplPercent =
+            ppl.totalAssignment > 0
+              ? ((progressVal / ppl.totalAssignment) * 100).toFixed(2)
+              : "0.00";
+
+          // Evaluasi Target Kemarin
+          const startDate = new Date("2026-06-15T00:00:00");
+          let today = new Date();
+          today.setHours(0, 0, 0, 0);
+          if (today < startDate || today > new Date("2026-07-31T00:00:00")) {
+            today = new Date("2026-06-23T00:00:00");
+          }
+          const diffTime = today - startDate;
+          const daysElapsed = Math.round(diffTime / (1000 * 60 * 60 * 24)) + 1;
+          const targetCumulativeYesterday =
+            (daysElapsed > 1 ? daysElapsed - 1 : 1) * CONFIG.TARGET_PER_HARI_PPL;
+
+          let badgeHtml = "";
+          let warningHtml = "";
+
+          if (daysElapsed > 1) {
+            if (progressVal >= targetCumulativeYesterday) {
+              badgeHtml = `<span class="bg-emerald-100 text-emerald-800 text-[10px] font-bold px-2 py-0.5 rounded-full">Sesuai Target</span>`;
+            } else {
+              badgeHtml = `<span class="bg-rose-100 text-rose-800 text-[10px] font-bold px-2 py-0.5 rounded-full">Kurang Target</span>`;
+            }
+          } else {
+            badgeHtml = `<span class="bg-slate-100 text-slate-600 text-[10px] font-bold px-2 py-0.5 rounded-full">Hari Ke-1</span>`;
+          }
+
+          if (ppl.draft > 20) {
+             warningHtml += `<span class="bg-amber-100 text-amber-800 text-[9px] font-bold px-1.5 py-0.5 rounded border border-amber-300 mr-1 mt-1 inline-block">Draft > 20</span>`;
+          }
+          if ((targetCumulativeYesterday - progressVal) >= 28) {
+             warningHtml += `<span class="bg-rose-100 text-rose-800 text-[9px] font-bold px-1.5 py-0.5 rounded border border-rose-300 mr-1 mt-1 inline-block">PPL Rendah</span>`;
+          }
+          
+          const totalWork = ppl.submittedPencacah + ppl.submittedRespondent + ppl.approved + ppl.rejected;
+          if (totalWork > 0 && (ppl.tidakDitemukan / totalWork) > 0.50) {
+             warningHtml += `<span class="bg-red-100 text-red-800 text-[9px] font-bold px-1.5 py-0.5 rounded border border-red-300 mr-1 mt-1 inline-block">>50% Tidak Ditemukan</span>`;
+          }
+          if ((ppl.nikKosong || 0) > 10) {
+             warningHtml += `<span class="bg-purple-100 text-purple-800 text-[9px] font-bold px-1.5 py-0.5 rounded border border-purple-300 mr-1 mt-1 inline-block">>10 NIK Kosong</span>`;
+          }
+
+          const myPplRank = globalPplRanks[ppl.email] || "-";
+          const rankHtml = `<span class="bg-indigo-100 text-indigo-800 text-[10px] font-bold px-2 py-0.5 rounded-full block text-right mt-1 w-max ml-auto shadow-sm">Peringkat #${myPplRank}</span>`;
+
+          const card = document.createElement("div");
+          card.className =
+            "bg-white p-4 rounded-2xl shadow-sm border border-slate-100 hover:border-blue-300 transition-colors";
+          card.innerHTML = `
+          <div class="flex justify-between items-start gap-2 mb-3">
+            <div class="min-w-0">
+              <h4 class="font-bold text-slate-800 text-sm leading-tight">${ppl.name}</h4>
+              <p class="text-xs text-slate-400 font-mono truncate">${ppl.email}</p>
+              ${warningHtml}
+            </div>
+            <div class="shrink-0 flex flex-col items-end">${badgeHtml}${rankHtml}</div>
+          </div>
+          <div class="grid grid-cols-3 gap-2 text-center text-xs mb-3">
+            <div class="bg-orange-50 p-2 rounded-lg">
+              <span class="text-slate-400 block mb-0.5 text-[10px] font-semibold uppercase">Progres</span>
+              <span class="font-bold text-slate-800 text-sm xl:text-base whitespace-nowrap">${formatNumber(progressVal)}/${formatNumber(targetCumulativeYesterday)}</span>
+            </div>
+            <div class="bg-blue-50 p-2 rounded-lg">
+              <span class="text-slate-400 block mb-0.5 text-[10px] font-semibold uppercase">Beban</span>
+              <span class="font-bold text-blue-900 text-sm xl:text-base">${formatNumber(ppl.totalAssignment)}</span>
+            </div>
+            <div class="bg-emerald-50 p-2 rounded-lg">
+              <span class="text-slate-400 block mb-0.5 text-[10px] font-semibold uppercase">Selesai</span>
+              <span class="font-bold text-emerald-600 text-base">${formatPercent(pplPercent)}%</span>
+            </div>
+          </div>
+          <div class="w-full bg-slate-100 rounded-full h-1.5 overflow-hidden mb-4">
+            <div class="bg-orange-500 h-1.5 rounded-full" style="width: ${pplPercent}%"></div>
+          </div>
+          <button onclick="showPPLDetailModal('${ppl.email}')" class="w-full bg-blue-900 hover:bg-indigo-950 text-white font-bold text-xs py-2.5 px-4 rounded-xl transition-all shadow-md">
+            Lihat Rincian Wilayah
+          </button>
+        `;
+          cardContainer.appendChild(card);
+        });
+      }
+
+      // Modal popup detail SLS petugas
+      function showPPLDetailModal(pplEmail) {
+        // Cari data PPL tersebut
+        let pplObj = null;
+        if (currentUser.role === "PML") {
+          pplObj = currentPMLPPLList.find((p) => p.email === pplEmail);
+        } else if (currentUser.role === "Admin") {
+          // Jika Admin, kumpulkan dari database langsung
+          const listRows = database.filter((r) => r.emailPpl === pplEmail);
+          if (listRows.length > 0) {
+            pplObj = {
+              name: listRows[0].pplName,
+              email: pplEmail,
+              rawRows: listRows,
+            };
+          }
+        }
+
+        if (!pplObj) return;
+
+        document.getElementById("modal-title").textContent =
+          "Rincian Wilayah Kerja Sensus";
+        document.getElementById("modal-subtitle").innerHTML =
+          `Pencacah Lapangan: <strong>${pplObj.name}</strong> (${pplObj.email})`;
+
+        const cardContainer = document.getElementById("modal-cards-container");
+        cardContainer.innerHTML = "";
+
+        pplObj.rawRows.forEach((row) => {
+          const submitted = row.submittedPencacah + row.submittedRespondent;
+          const card = document.createElement("div");
+          card.className =
+            "bg-white p-4 rounded-2xl shadow-sm border border-slate-100";
+          card.innerHTML = `
+          <h4 class="font-bold text-slate-800 text-sm mb-3 truncate">${row.wilayah}</h4>
+          <div class="grid grid-cols-3 gap-2 text-center text-xs">
+            <div class="bg-slate-50 p-2 rounded-lg">
+              <span class="text-slate-400 block mb-0.5 text-[10px] font-semibold uppercase">Total</span>
+              <span class="font-bold text-slate-700">${formatNumber(row.totalSekarang)}</span>
+            </div>
+            <div class="bg-blue-50/50 p-2 rounded-lg">
+              <span class="text-blue-500 block mb-0.5 text-[10px] font-semibold uppercase">Open</span>
+              <span class="font-bold text-blue-700">${formatNumber(row.open)}</span>
+            </div>
+            <div class="bg-amber-50/50 p-2 rounded-lg">
+              <span class="text-amber-500 block mb-0.5 text-[10px] font-semibold uppercase">Draft</span>
+              <span class="font-bold text-amber-700">${formatNumber(row.draft)}</span>
+            </div>
+            <div class="bg-indigo-50/50 p-2 rounded-lg">
+              <span class="text-indigo-500 block mb-0.5 text-[10px] font-semibold uppercase">Submitted</span>
+              <span class="font-bold text-indigo-700">${formatNumber(submitted)}</span>
+            </div>
+            <div class="bg-emerald-50/50 p-2 rounded-lg">
+              <span class="text-emerald-500 block mb-0.5 text-[10px] font-semibold uppercase">Approved</span>
+              <span class="font-bold text-emerald-700">${formatNumber(row.approved)}</span>
+            </div>
+            <div class="bg-rose-50/50 p-2 rounded-lg">
+              <span class="text-rose-500 block mb-0.5 text-[10px] font-semibold uppercase">Rejected</span>
+              <span class="font-bold text-rose-700">${formatNumber(row.rejected)}</span>
+            </div>
+            <div class="bg-slate-50 p-2 rounded-lg col-span-3 flex justify-between items-center px-4">
+              <span class="text-slate-500 text-[10px] font-bold uppercase">Tidak Ditemukan</span>
+              <span class="font-bold text-slate-700">${formatNumber(row.tidakDitemukan || 0)}</span>
+            </div>
+          </div>
+        `;
+          cardContainer.appendChild(card);
+        });
+
+        const modal = document.getElementById("modal-detail");
+        modal.classList.remove("hidden");
+      }
+
+      function closeModal() {
+        document.getElementById("modal-detail").classList.add("hidden");
+      }
+
+      // ================= IMPLEMENTASI ADMIN DASHBOARD =================
+      let adminFilteredWilayahData = [];
+
+      function renderAdminDashboard() {
+        document.getElementById("panel-admin").classList.remove("hidden");
+
+        // Populate Cascade Dropdowns
+        populateAdminFilters();
+
+        // Hitung dan update layout statistic admin
+        calculateAdminStats();
+
+        // Render Papan Peringkat / Leaderboards
+        renderAdminLeaderboards();
+      }
+
+      function populateAdminFilters() {
+        const pmlSelect = document.getElementById("admin-filter-pml");
+        const pplSelect = document.getElementById("admin-filter-ppl");
+
+        // Simpan nilai pilihan sebelumnya jika ada
+        const prevPML = pmlSelect.value;
+        const prevPPL = pplSelect.value;
+
+        // Extract unique PMLs
+        const pmls = [
+          ...new Set(database.map((r) => r.pmlName).filter(Boolean)),
+        ];
+        pmlSelect.innerHTML = `<option value="ALL">Semua Tim PML</option>`;
+        pmls.sort().forEach((p) => {
+          pmlSelect.innerHTML += `<option value="${p}">${p}</option>`;
+        });
+
+        // Restore atau kembalikan pilihan PML
+        if (pmls.includes(prevPML)) {
+          pmlSelect.value = prevPML;
+        }
+
+        // Update PPL dropdown based on PML selection
+        updatePPLDropdown(pmlSelect.value, prevPPL);
+      }
+
+      function updatePPLDropdown(selectedPML, prevPPLValue) {
+        const pplSelect = document.getElementById("admin-filter-ppl");
+
+        let filteredRows = database;
+        if (selectedPML !== "ALL") {
+          filteredRows = database.filter((r) => r.pmlName === selectedPML);
+        }
+
+        const ppls = [
+          ...new Set(filteredRows.map((r) => r.pplName).filter(Boolean)),
+        ];
+        pplSelect.innerHTML = `<option value="ALL">Semua Petugas PPL</option>`;
+        ppls.sort().forEach((p) => {
+          pplSelect.innerHTML += `<option value="${p}">${p}</option>`;
+        });
+
+        if (ppls.includes(prevPPLValue)) {
+          pplSelect.value = prevPPLValue;
+        }
+      }
+
+      function onAdminPMLChange() {
+        const selectedPML = document.getElementById("admin-filter-pml").value;
+        updatePPLDropdown(selectedPML, "ALL");
+        adminCurrentPage = 1; // Reset page
+        calculateAdminStats();
+        renderAdminLeaderboards();
+      }
+
+      function onAdminPPLChange() {
+        adminCurrentPage = 1; // Reset page
+        calculateAdminStats();
+        renderAdminLeaderboards();
+      }
+
+      function calculateAdminStats() {
+        const selectedPML = document.getElementById("admin-filter-pml").value;
+        const selectedPPL = document.getElementById("admin-filter-ppl").value;
+
+        let filtered = database;
+
+        if (selectedPML !== "ALL") {
+          filtered = filtered.filter((r) => r.pmlName === selectedPML);
+        }
+        if (selectedPPL !== "ALL") {
+          filtered = filtered.filter((r) => r.pplName === selectedPPL);
+        }
+
+        adminFilteredWilayahData = filtered;
+
+        // Aggregations
+        let totalAssignment = 0;
+        let totalOpen = 0;
+        let totalDraft = 0;
+        let totalSubmitted = 0;
+        let totalApproved = 0;
+        let totalRejected = 0;
+        let totalTidakDitemukan = 0;
+
+        filtered.forEach((row) => {
+          totalAssignment += row.totalSekarang;
+          totalOpen += row.open;
+          totalDraft += row.draft;
+          totalSubmitted += row.submittedPencacah + row.submittedRespondent;
+          totalApproved += row.approved;
+          totalRejected += row.rejected;
+          totalTidakDitemukan += (row.tidakDitemukan || 0);
+        });
+
+        document.getElementById("admin-stat-assignment").textContent =
+          formatNumber(totalAssignment);
+        document.getElementById("admin-stat-tidak-ditemukan").textContent =
+          formatNumber(totalTidakDitemukan);
+        document.getElementById("admin-stat-open").textContent = formatNumber(totalOpen);
+        document.getElementById("admin-stat-draft").textContent = formatNumber(totalDraft);
+        document.getElementById("admin-stat-submitted").textContent =
+          formatNumber(totalSubmitted);
+        document.getElementById("admin-stat-approved").textContent =
+          formatNumber(totalApproved);
+        document.getElementById("admin-stat-rejected").textContent =
+          formatNumber(totalRejected);
+
+        // Hitung persentase progress: (Submitted + Approved + Rejected) / Total Assignment
+        const totalProgress = totalSubmitted + totalApproved + totalRejected;
+        const percent =
+          totalAssignment > 0
+            ? ((totalProgress / totalAssignment) * 100).toFixed(2)
+            : "0.00";
+        document.getElementById("admin-stat-percentage").textContent =
+          `${formatPercent(parseFloat(percent))}%`;
+        document.getElementById("admin-stat-percentage-bar").style.width =
+          `${percent}%`;
+
+        const uniquePPLCount = [
+          ...new Set(filtered.map((r) => r.emailPpl).filter(Boolean)),
+        ].length;
+        const activePPLCount =
+          uniquePPLCount > 0
+            ? uniquePPLCount
+            : database.length > 0
+              ? [...new Set(database.map((r) => r.emailPpl).filter(Boolean))]
+                  .length
+              : 142;
+
+        const startDate = new Date("2026-06-15T00:00:00");
+        let today = new Date();
+        today.setHours(0, 0, 0, 0);
+        if (today < startDate || today > new Date("2026-07-31T00:00:00")) {
+          today = new Date("2026-06-23T00:00:00");
+        }
+
+        const yesterday = new Date(today);
+        yesterday.setDate(yesterday.getDate() - 1);
+        const yesterdayStr = yesterday.toLocaleDateString("id-ID", {
+          day: "numeric",
+          month: "long",
+          year: "numeric",
+        });
+
+        const diffTime = today - startDate;
+        const daysElapsed = Math.round(diffTime / (1000 * 60 * 60 * 24)) + 1;
+
+        const targetDaily =
+          activePPLCount * CONFIG.TARGET_PER_HARI_PPL * (daysElapsed > 1 ? daysElapsed - 1 : 1);
+
+        // Jabatan - Nama
+        let subtitleText = "Seluruh Tim PPL";
+        if (selectedPML !== "ALL" && selectedPPL === "ALL") {
+          subtitleText = `Tim PML - ${selectedPML}`;
+        } else if (selectedPPL !== "ALL") {
+          subtitleText = `PPL - ${selectedPPL}`;
+        } else if (selectedPML === "ALL" && selectedPPL === "ALL") {
+          subtitleText = `Seluruh PPL (${activePPLCount})`;
+        }
+        document.getElementById("admin-stat-subtitle").textContent =
+          subtitleText;
+
+        document.getElementById("admin-stat-tersubmit").textContent =
+          formatNumber(totalProgress);
+        document.getElementById("admin-stat-tersubmit-total").textContent =
+          formatNumber(totalAssignment);
+
+        // Progres Pemeriksaan
+        const totalDiperiksa = totalApproved + totalRejected;
+        const pemeriksaanPercentStr = totalAssignment > 0 ? ((totalDiperiksa / totalAssignment) * 100).toFixed(2) : "0.00";
+        
+        document.getElementById("admin-stat-pemeriksaan-subtitle").textContent = subtitleText;
+        document.getElementById("admin-stat-pemeriksaan-percentage").textContent = formatPercent(parseFloat(pemeriksaanPercentStr)) + "%";
+        document.getElementById("admin-stat-diperiksa").textContent = formatNumber(totalDiperiksa);
+        document.getElementById("admin-stat-diperiksa-total").textContent = formatNumber(totalAssignment);
+        document.getElementById("admin-stat-pemeriksaan-percentage-bar").style.width = pemeriksaanPercentStr + "%";
+
+        document.getElementById("admin-stat-target-date").textContent =
+          `Target per: ${yesterdayStr}`;
+        document.getElementById("admin-stat-kumulatif").textContent =
+          `${formatNumber(totalProgress)} / ${formatNumber(targetDaily)}`;
+        document.getElementById("admin-stat-total-beban-info").textContent =
+          formatNumber(totalAssignment);
+
+        const badgeEl = document.getElementById("admin-target-badge");
+        if (totalProgress >= targetDaily) {
+          badgeEl.innerHTML = `<span class="inline-block text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-300">Mencapai target harian ✅</span>`;
+        } else {
+          badgeEl.innerHTML = `<span class="inline-block text-[10px] font-bold px-2 py-0.5 rounded-full bg-rose-100 text-rose-800 border border-rose-300">Tidak mencapai target harian ⚠️</span>`;
+        }
+
+
+        // Render Cards Rincian Wilayah Admin
+        displayAdminWilayahCards(adminFilteredWilayahData);
+      }
+
+      // Render Admin wilayah sensus dalam format CARD GRID dengan PAGINATION
+      function displayAdminWilayahCards(dataList) {
+        const container = document.getElementById("admin-cards-container");
+        container.innerHTML = "";
+
+        if (dataList.length === 0) {
+          container.innerHTML = `<div class="col-span-full text-center py-12 text-slate-400">Tidak ada data wilayah yang sesuai filter.</div>`;
+          document.getElementById("admin-page-info").textContent =
+            "Halaman 0 dari 0";
+          document.getElementById("admin-prev-btn").disabled = true;
+          document.getElementById("admin-next-btn").disabled = true;
+          return;
+        }
+
+        const totalPages = Math.ceil(dataList.length / pageSize);
+        if (adminCurrentPage > totalPages) adminCurrentPage = totalPages || 1;
+
+        const start = (adminCurrentPage - 1) * pageSize;
+        const end = start + pageSize;
+        const paginatedList = dataList.slice(start, end);
+
+        paginatedList.forEach((row) => {
+          const sub = row.submittedPencacah + row.submittedRespondent;
+          const totalProgress =
+            row.submittedPencacah +
+            row.submittedRespondent +
+            row.approved +
+            row.rejected;
+          const percentage =
+            row.totalSekarang > 0
+              ? ((totalProgress / row.totalSekarang) * 100).toFixed(2)
+              : "0.00";
+
+          const isHighTD = totalProgress > 0 && ((row.tidakDitemukan || 0) / totalProgress) > 0.50;
+          const cardClass = isHighTD
+            ? "bg-red-50/15 p-5 rounded-2xl shadow-sm border-2 border-red-500 flex flex-col justify-between hover:shadow-md transition-all relative overflow-hidden"
+            : "bg-white p-5 rounded-2xl shadow-sm border border-slate-100 flex flex-col justify-between hover:shadow-md transition-all";
+
+          const card = document.createElement("div");
+          card.className = cardClass;
+          
+          let tdBadge = "";
+          if (isHighTD) {
+            tdBadge = `<span class="bg-red-100 text-red-855 text-[9px] font-extrabold px-1.5 py-0.5 rounded-full shrink-0 border border-red-300">⚠️ >50% TD</span>`;
+          }
+
+          card.innerHTML = `
+          <div>
+            <div class="flex justify-between items-start gap-2 mb-2">
+              <h4 class="font-bold text-slate-800 text-sm">${row.wilayah}</h4>
+              <div class="flex items-center gap-1 shrink-0">
+                ${tdBadge}
+                <span class="bg-emerald-100 text-emerald-800 text-xs font-bold px-2 py-0.5 rounded-full shrink-0">${formatPercent(parseFloat(percentage))}%</span>
+              </div>
+            </div>
+            <div class="w-full bg-slate-100 rounded-full h-1 overflow-hidden mb-4">
+              <div class="bg-emerald-500 h-1 rounded-full" style="width: ${percentage}%"></div>
+            </div>
+            <div class="grid grid-cols-2 gap-2 text-center text-xs">
+              <div class="bg-slate-50 p-2 rounded-lg">
+                <span class="text-slate-400 block mb-0.5 text-[10px] font-semibold uppercase">Total Beban</span>
+                <span class="font-bold text-slate-700 text-sm">${formatNumber(row.totalSekarang)}</span>
+              </div>
+              <div class="bg-blue-50 p-2 rounded-lg">
+                <span class="text-blue-500 block mb-0.5 text-[10px] font-semibold uppercase">Progres</span>
+                <span class="font-bold text-blue-700 text-sm">${formatNumber(totalProgress)}</span>
+              </div>
+              <div class="bg-indigo-50 p-2 rounded-lg col-span-2 flex justify-around">
+                <div>
+                  <span class="text-indigo-500 block text-[9px] font-semibold uppercase mb-0.5">Sub</span>
+                  <span class="font-bold text-indigo-700 text-xs">${formatNumber(sub)}</span>
+                </div>
+                <div>
+                  <span class="text-emerald-500 block text-[9px] font-semibold uppercase mb-0.5">App</span>
+                  <span class="font-bold text-emerald-700 text-xs">${formatNumber(row.approved)}</span>
+                </div>
+                <div>
+                  <span class="text-rose-500 block text-[9px] font-semibold uppercase mb-0.5">Rej</span>
+                  <span class="font-bold text-rose-700 text-xs">${formatNumber(row.rejected)}</span>
+                </div>
+              </div>
+              <div class="bg-slate-50 p-2 rounded-lg col-span-2 flex justify-between items-center px-4">
+                <span class="text-slate-500 text-[10px] font-bold uppercase">Tidak Ditemukan</span>
+                <span class="font-bold text-slate-700 text-sm">${formatNumber(row.tidakDitemukan || 0)}</span>
+              </div>
+            </div>
+          </div>
+          <div class="border-t border-slate-100 pt-3 flex flex-col gap-0.5 mt-3">
+            <div class="flex justify-between items-center text-[10px]">
+              <span class="text-slate-400 font-semibold uppercase">PPL:</span>
+              <button onclick="showPPLDetailModal('${row.emailPpl}')" class="text-blue-600 hover:text-indigo-900 font-bold hover:underline truncate max-w-[150px] text-right">
+                ${row.pplName || "-"}
+              </button>
+            </div>
+            <div class="flex justify-between items-center text-[10px]">
+              <span class="text-slate-400 font-semibold uppercase">PML:</span>
+              <span class="text-slate-500 font-medium truncate max-w-[150px] text-right">${row.pmlName || "-"}</span>
+            </div>
+          </div>
+        `;
+          container.appendChild(card);
+        });
+
+        document.getElementById("admin-page-info").textContent =
+          `Halaman ${adminCurrentPage} dari ${totalPages}`;
+        document.getElementById("admin-prev-btn").disabled =
+          adminCurrentPage === 1;
+        document.getElementById("admin-next-btn").disabled =
+          adminCurrentPage === totalPages;
+      }
+
+      function changeAdminPage(direction) {
+        adminCurrentPage += direction;
+        filterAdminWilayah();
+      }
+
+      function filterAdminWilayah() {
+        const keyword = document
+          .getElementById("admin-search-wilayah")
+          .value.toLowerCase()
+          .trim();
+        const filtered = adminFilteredWilayahData.filter((r) =>
+          r.wilayah.toLowerCase().includes(keyword),
+        );
+        displayAdminWilayahCards(filtered);
+      }
+
+      // Leaderboard/Ranking Formula logic: sum(PQRS)
+      function renderAdminLeaderboards() {
+        const startDate = new Date("2026-06-15T00:00:00");
+        let today = new Date();
+        today.setHours(0, 0, 0, 0);
+        if (today < startDate || today > new Date("2026-07-31T00:00:00")) {
+          today = new Date("2026-06-23T00:00:00");
+        }
+        const diffTime = today - startDate;
+        const daysElapsed = Math.round(diffTime / (1000 * 60 * 60 * 24)) + 1;
+        const targetPerPPL = 7 * (daysElapsed > 1 ? daysElapsed - 1 : 1);
+
+        const selectedPML = document.getElementById("admin-filter-pml").value;
+        const selectedPPL = document.getElementById("admin-filter-ppl").value;
+
+        // 1. PPL Leaderboard
+        const pplScores = {};
+        database.forEach((row) => {
+          const key = row.emailPpl;
+          if (!key) return;
+          if (!pplScores[key]) {
+            pplScores[key] = {
+              name: row.pplName,
+              email: row.emailPpl,
+              pmlName: row.pmlName,
+              totalAssignment: 0,
+              progress: 0,
+              pureProgress: 0,
+            };
+          }
+          pplScores[key].totalAssignment += row.totalSekarang;
+          pplScores[key].progress +=
+            (row.submittedPencacah +
+            row.submittedRespondent +
+            row.approved +
+            row.rejected) -
+            (row.tidakDitemukan || 0);
+          pplScores[key].pureProgress +=
+            row.submittedPencacah +
+            row.submittedRespondent +
+            row.approved +
+            row.rejected;
+        });
+
+        const pplListSorted = Object.values(pplScores)
+          .sort((a, b) => b.progress - a.progress)
+          .map((item, index) => ({ ...item, globalRank: index }));
+
+        const pplListFiltered = pplListSorted.filter(ppl => {
+          if (selectedPML !== "ALL" && ppl.pmlName !== selectedPML) return false;
+          if (selectedPPL !== "ALL" && ppl.name !== selectedPPL) return false;
+          return true;
+        });
+
+        const pplLeaderDiv = document.getElementById("admin-leaderboard-ppl");
+        pplLeaderDiv.innerHTML = "";
+
+        pplListFiltered.forEach((ppl) => {
+          let medal = "";
+          if (ppl.globalRank === 0) medal = "🥇 ";
+          else if (ppl.globalRank === 1) medal = "🥈 ";
+          else if (ppl.globalRank === 2) medal = "🥉 ";
+          else
+            medal = `<span class="inline-block w-5 text-slate-400 text-xs font-bold text-center">${ppl.globalRank + 1}</span> `;
+
+          const percent =
+            ppl.totalAssignment > 0
+              ? ((ppl.pureProgress / ppl.totalAssignment) * 100)
+              : 0;
+
+          const badge =
+            ppl.pureProgress >= targetPerPPL
+              ? `<span class="bg-emerald-100 text-emerald-800 text-[8px] font-bold px-1.5 py-0.5 rounded-full inline-block mt-1">✅ Target</span>`
+              : `<span class="bg-rose-100 text-rose-800 text-[8px] font-bold px-1.5 py-0.5 rounded-full inline-block mt-1">⚠️ Belum</span>`;
+
+          const item = document.createElement("div");
+          item.className =
+            "flex items-center justify-between p-2.5 rounded-xl bg-slate-50 border border-slate-100 hover:border-orange-500/20 transition-all cursor-pointer";
+          item.onclick = function () {
+            showPPLDetailModal(ppl.email);
+          };
+          item.innerHTML = `
+          <div class="flex items-center gap-2 overflow-hidden mr-2">
+            <div>${medal}</div>
+            <div class="truncate">
+              <span class="font-bold text-slate-700 text-xs sm:text-sm block truncate">${ppl.name}</span>
+              <div class="flex items-center gap-1 mt-0.5">
+                <span class="text-[9px] text-slate-400 truncate">PML: ${ppl.pmlName}</span>
+                ${badge}
+              </div>
+            </div>
+          </div>
+          <div class="text-right shrink-0">
+             <span class="text-[9px] font-semibold text-slate-400 block">Progres Bersih Pendataan</span>
+             <span class="text-sm font-extrabold text-orange-500 block leading-tight my-0.5">${formatNumber(ppl.progress)}</span>
+             <span class="text-[9px] font-semibold text-slate-500 block">Submit ${formatNumber(ppl.pureProgress)}/${formatNumber(ppl.totalAssignment)}</span>
+          </div>
+        `;
+          pplLeaderDiv.appendChild(item);
+        });
+
+        // 2. PML Leaderboard (Team aggregations)
+        const pmlScores = {};
+        database.forEach((row) => {
+          const key = row.pmlName;
+          if (!key) return;
+          if (!pmlScores[key]) {
+            pmlScores[key] = {
+              name: row.pmlName,
+              totalAssignment: 0,
+              progress: 0,
+              pureProgress: 0,
+              approvedRejected: 0,
+              tidakDitemukan: 0,
+              submittedUnchecked: 0,
+              pplEmails: new Set(),
+              pplNames: new Set(),
+              pplList: {},
+            };
+          }
+          if (row.emailPpl) {
+             pmlScores[key].pplEmails.add(row.emailPpl);
+             pmlScores[key].pplNames.add(row.pplName);
+             if (!pmlScores[key].pplList[row.emailPpl]) {
+               pmlScores[key].pplList[row.emailPpl] = { progress: 0, totalAssignment: 0 };
+             }
+             pmlScores[key].pplList[row.emailPpl].progress +=
+               (row.submittedPencacah + row.submittedRespondent + row.approved + row.rejected) - (row.tidakDitemukan || 0);
+             pmlScores[key].pplList[row.emailPpl].totalAssignment += row.totalSekarang;
+          }
+          pmlScores[key].totalAssignment += row.totalSekarang;
+          pmlScores[key].progress +=
+            (row.submittedPencacah +
+            row.submittedRespondent +
+            row.approved +
+            row.rejected) -
+            (row.tidakDitemukan || 0);
+          pmlScores[key].pureProgress +=
+            row.submittedPencacah +
+            row.submittedRespondent +
+            row.approved +
+            row.rejected;
+          pmlScores[key].approvedRejected += row.approved + row.rejected;
+          pmlScores[key].tidakDitemukan += (row.tidakDitemukan || 0);
+          pmlScores[key].submittedUnchecked += row.submittedPencacah + row.submittedRespondent;
+        });
+
+        const pmlListSorted = Object.values(pmlScores)
+          .sort((a, b) => {
+             const cleanA = a.approvedRejected - (a.tidakDitemukan || 0);
+             const cleanB = b.approvedRejected - (b.tidakDitemukan || 0);
+             return cleanB - cleanA;
+          })
+          .map((item, index) => ({ ...item, globalRank: index }));
+
+        const pmlListFiltered = pmlListSorted.filter(pml => {
+          if (selectedPML !== "ALL" && pml.name !== selectedPML) return false;
+          if (selectedPPL !== "ALL" && !pml.pplNames.has(selectedPPL)) return false;
+          return true;
+        });
+
+        const pmlLeaderDiv = document.getElementById("admin-leaderboard-pml");
+        pmlLeaderDiv.innerHTML = "";
+
+        pmlListFiltered.forEach((pml) => {
+          let medal = "";
+          if (pml.globalRank === 0) medal = "🥇 ";
+          else if (pml.globalRank === 1) medal = "🥈 ";
+          else if (pml.globalRank === 2) medal = "🥉 ";
+          else
+            medal = `<span class="inline-block w-5 text-slate-400 text-xs font-bold text-center">${pml.globalRank + 1}</span> `;
+
+          const percent =
+            pml.totalAssignment > 0
+              ? ((pml.pureProgress / pml.totalAssignment) * 100)
+              : 0;
+
+          const targetTeam = targetPerPPL * pml.pplEmails.size;
+          const badge =
+            pml.pureProgress >= targetTeam
+              ? `<span class="bg-emerald-100 text-emerald-800 text-[8px] font-bold px-1.5 py-0.5 rounded-full inline-block mt-1">✅ Target</span>`
+              : `<span class="bg-rose-100 text-rose-800 text-[8px] font-bold px-1.5 py-0.5 rounded-full inline-block mt-1">⚠️ Belum</span>`;
+
+          const pmlCleanProgress = pml.approvedRejected - (pml.tidakDitemukan || 0);
+
+          const item = document.createElement("div");
+          item.className =
+            "flex items-center justify-between p-2.5 rounded-xl bg-slate-50 border border-slate-100 hover:border-blue-900/10 transition-all";
+          item.innerHTML = `
+          <div class="flex items-center gap-2 overflow-hidden mr-2">
+            <div>${medal}</div>
+            <div class="truncate">
+              <span class="font-bold text-slate-700 text-xs sm:text-sm block truncate">${pml.name}</span>
+              ${badge}
+            </div>
+          </div>
+          <div class="text-right shrink-0">
+             <span class="text-[9px] font-semibold text-slate-400 block">Progres Bersih Pemeriksaan</span>
+             <span class="text-sm font-extrabold text-emerald-600 block leading-tight my-0.5">${formatNumber(pmlCleanProgress)}</span>
+             <span class="text-[9px] font-semibold text-slate-500 block">App+Rej ${formatNumber(pml.approvedRejected)}/${formatNumber(pml.totalAssignment)}</span>
+          </div>
+        `;
+          pmlLeaderDiv.appendChild(item);
+        });
+
+        // 3. Tim Leaderboard
+        // PPL Score = avg % Progres Bersih per PPL in team  (bobot 75%)
+        // PML Score = (App+Rej - TidakDitemukan) / (App+Rej + SubmittedUnchecked) * 100  (bobot 25%)
+        // Team Score = avgPPLScore * 0.75 + pmlScore * 0.25
+        const timListSorted = Object.values(pmlScores).map(pml => {
+          const pplEntries = Object.values(pml.pplList);
+          let avgPPLScore = 0;
+          if (pplEntries.length > 0) {
+            const sumPPLScore = pplEntries.reduce((sum, p) => {
+              return sum + (p.totalAssignment > 0 ? (p.progress / p.totalAssignment) * 100 : 0);
+            }, 0);
+            avgPPLScore = sumPPLScore / pplEntries.length;
+          }
+          const cleanPemeriksaan = pml.approvedRejected - (pml.tidakDitemukan || 0);
+          const totalMasukPML = pml.approvedRejected + pml.submittedUnchecked;
+          const pmlScore = totalMasukPML > 0 ? (cleanPemeriksaan / totalMasukPML) * 100 : 0;
+          const score = avgPPLScore * 0.75 + pmlScore * 0.25;
+          return { ...pml, score, pplPercent: avgPPLScore, pmlPercent: pmlScore, cleanPemeriksaan };
+        })
+        .sort((a, b) => b.score - a.score)
+        .map((item, index) => ({ ...item, globalRank: index }));
+
+        const timListFiltered = timListSorted.filter(tim => {
+          if (selectedPML !== "ALL" && tim.name !== selectedPML) return false;
+          if (selectedPPL !== "ALL" && !tim.pplNames.has(selectedPPL)) return false;
+          return true;
+        });
+
+        const timLeaderDiv = document.getElementById("admin-leaderboard-tim");
+        timLeaderDiv.innerHTML = "";
+
+        timListFiltered.forEach((tim) => {
+          let medal = "";
+          if (tim.globalRank === 0) medal = "🥇 ";
+          else if (tim.globalRank === 1) medal = "🥈 ";
+          else if (tim.globalRank === 2) medal = "🥉 ";
+          else
+            medal = `<span class="inline-block w-5 text-slate-400 text-xs font-bold text-center">${tim.globalRank + 1}</span> `;
+
+          const item = document.createElement("div");
+          item.className =
+            "flex items-center justify-between p-2.5 rounded-xl bg-slate-50 border border-slate-100 hover:border-emerald-500/20 transition-all";
+          item.innerHTML = `
+          <div class="flex items-center gap-2 overflow-hidden mr-2">
+            <div>${medal}</div>
+            <div class="truncate">
+              <span class="font-bold text-slate-700 text-xs sm:text-sm block truncate">${tim.name}</span>
+              <div class="flex items-center gap-2 mt-0.5 flex-wrap">
+                <span class="text-[9px] text-slate-400">Avg PPL: <span class="font-bold text-blue-600">${formatPercent(tim.pplPercent)}</span></span>
+                <span class="text-[9px] text-slate-400">Periksa: <span class="font-bold text-emerald-600">${formatPercent(tim.pmlPercent)}</span></span>
+              </div>
+            </div>
+          </div>
+          <div class="text-right shrink-0">
+             <span class="text-sm font-bold text-emerald-600 block">${formatPercent(tim.score)}</span>
+             <span class="text-[9px] font-semibold text-slate-400 block uppercase">Skor Tim</span>
+          </div>
+        `;
+          timLeaderDiv.appendChild(item);
+        });
+      }
+
+      function closeAdminAlertModal() {
+        const modal = document.getElementById("modal-admin-alert");
+        modal.querySelector("div").classList.remove("scale-100");
+        modal.querySelector("div").classList.add("scale-95");
+        setTimeout(() => {
+          modal.classList.add("hidden");
+        }, 150);
+      }
+
+      function showAdminListModal(type) {
+        let list = [];
+        let title = "";
+        let filterLogic = null;
+        let sortLogic = null;
+
+        if (type === 'HUTANG_PML') {
+          const pmlMap = {};
+          adminFilteredWilayahData.forEach(row => {
+            if (!row.pmlName) return;
+            if (!pmlMap[row.pmlName]) {
+              pmlMap[row.pmlName] = {
+                name: row.pmlName,
+                submittedUnchecked: 0,
+                approved: 0,
+                rejected: 0,
+                submittedTotal: 0
+              };
+            }
+            pmlMap[row.pmlName].submittedUnchecked += row.submittedPencacah + row.submittedRespondent;
+            pmlMap[row.pmlName].approved += row.approved;
+            pmlMap[row.pmlName].rejected += row.rejected;
+            pmlMap[row.pmlName].submittedTotal += row.submittedPencacah + row.submittedRespondent + row.approved + row.rejected;
+          });
+          list = Object.values(pmlMap);
+          title = "PML Progres Rendah (Belum Diperiksa > 50)";
+          filterLogic = (p) => p.submittedUnchecked > 50;
+          sortLogic = (a, b) => b.submittedUnchecked - a.submittedUnchecked;
+        } else {
+          // Find data from adminFilteredWilayahData and group by PPL
+          const pplMap = {};
+          adminFilteredWilayahData.forEach(row => {
+            if (!row.emailPpl) return;
+            if (!pplMap[row.emailPpl]) {
+              pplMap[row.emailPpl] = {
+                name: row.pplName,
+                pmlName: row.pmlName,
+                draft: 0,
+                progress: 0,
+                submittedUnchecked: 0,
+                approved: 0,
+                rejected: 0,
+                submittedTotal: 0,
+                tidakDitemukan: 0,
+                nikKosong: 0
+              };
+            }
+            pplMap[row.emailPpl].draft += row.draft;
+            pplMap[row.emailPpl].progress +=
+              row.submittedPencacah +
+              row.submittedRespondent +
+              row.approved +
+              row.rejected;
+            pplMap[row.emailPpl].submittedUnchecked += row.submittedPencacah + row.submittedRespondent;
+            pplMap[row.emailPpl].approved += row.approved;
+            pplMap[row.emailPpl].rejected += row.rejected;
+            pplMap[row.emailPpl].submittedTotal += row.submittedPencacah + row.submittedRespondent + row.approved + row.rejected;
+            pplMap[row.emailPpl].tidakDitemukan += (row.tidakDitemukan || 0);
+            pplMap[row.emailPpl].nikKosong += (row.nikKosong || 0);
+          });
+          list = Object.values(pplMap);
+
+          if (type === 'DRAFT') {
+            title = "PPL dengan Draft > 20";
+            filterLogic = (p) => p.draft > 20;
+            sortLogic = (a, b) => b.draft - a.draft; // highest draft first
+          } else if (type === 'HUTANG') {
+            const startDate = new Date(2026, 5, 15); // 15 Juni 2026
+            const today = new Date();
+            const diffTime = today - startDate;
+            const daysElapsed = Math.round(diffTime / (1000 * 60 * 60 * 24)) + 1;
+            const targetCumulativeYesterday = (daysElapsed - 1) * CONFIG.TARGET_PER_HARI_PPL;
+
+            title = "PPL Progres Rendah (Hutang >= 28)";
+            filterLogic = (p) => (targetCumulativeYesterday - p.progress) >= 28;
+            sortLogic = (a, b) => a.progress - b.progress; // lowest progress first
+          } else if (type === 'TIDAK_DITEMUKAN') {
+            title = "PPL dengan >50% Tidak Ditemukan";
+            filterLogic = (p) => {
+              const totalWork = p.submittedTotal;
+              return totalWork > 0 && (p.tidakDitemukan / totalWork) > 0.50;
+            };
+            sortLogic = (a, b) => {
+              const ratioA = a.submittedTotal > 0 ? (a.tidakDitemukan / a.submittedTotal) : 0;
+              const ratioB = b.submittedTotal > 0 ? (b.tidakDitemukan / b.submittedTotal) : 0;
+              return ratioB - ratioA; // highest ratio first
+            };
+          } else if (type === 'NIK_KOSONG') {
+            title = "PPL dengan >10 NIK Kosong";
+            filterLogic = (p) => (p.nikKosong || 0) > 10;
+            sortLogic = (a, b) => (b.nikKosong || 0) - (a.nikKosong || 0); // highest count first
+          }
+        }
+
+        list = list.filter(filterLogic).sort(sortLogic);
+
+        // Populate Modal
+        document.getElementById("admin-alert-title").textContent = title;
+        const container = document.getElementById("admin-alert-container");
+        container.innerHTML = "";
+
+        if (list.length === 0) {
+          container.innerHTML = '<p class="text-slate-500 text-sm italic col-span-full">Tidak ada data petugas yang sesuai kriteria ini.</p>';
+        } else {
+          list.forEach((p, idx) => {
+            const card = document.createElement("div");
+            card.className = "p-4 bg-slate-50 border border-slate-100 rounded-xl flex justify-between items-center";
+            let valHtml = "";
+            let pmlSubtitle = p.pmlName ? `PML: ${p.pmlName}` : 'Tim Pengawas';
+
+            if (type === 'DRAFT') {
+               valHtml = `<span class="text-xl font-bold text-amber-600">${formatNumber(p.draft)}</span><span class="text-[10px] font-semibold uppercase tracking-wider text-slate-500 block">Tersubmit: ${formatNumber(p.submittedTotal)}</span>`;
+            } else if (type === 'HUTANG') {
+               const startDate = new Date(2026, 5, 15);
+               const today = new Date();
+               const diffTime = today - startDate;
+               const daysElapsed = Math.round(diffTime / (1000 * 60 * 60 * 24)) + 1;
+               const targetCumulativeYesterday = (daysElapsed - 1) * CONFIG.TARGET_PER_HARI_PPL;
+               const hutang = targetCumulativeYesterday - p.progress;
+               valHtml = `<span class="text-xl font-bold text-rose-600">-${formatNumber(hutang)}</span><span class="text-[10px] font-semibold uppercase tracking-wider text-slate-500 block">Progres: ${formatNumber(p.progress)} (${formatNumber(p.draft)} Draft)</span>`;
+            } else if (type === 'HUTANG_PML') {
+               const ratio = p.submittedTotal > 0 ? (p.approved + p.rejected) / p.submittedTotal * 100 : 0;
+               valHtml = `<span class="text-xl font-bold text-rose-600">${formatNumber(p.submittedUnchecked)}</span><span class="text-[9px] font-semibold uppercase tracking-wider text-slate-500 block mt-1">App+Rej: ${formatNumber(p.approved + p.rejected)} / ${formatNumber(p.submittedTotal)} (${formatPercent(ratio)}%)</span>`;
+            } else if (type === 'TIDAK_DITEMUKAN') {
+               const ratio = p.submittedTotal > 0 ? (p.tidakDitemukan / p.submittedTotal * 100) : 0;
+               const cleanProgress = p.progress - p.tidakDitemukan;
+               valHtml = `<span class="text-xl font-bold text-red-600">${formatPercent(ratio)}%</span><span class="text-[10px] font-semibold uppercase tracking-wider text-slate-500 block">Tidak Ditemukan: ${formatNumber(p.tidakDitemukan)} / ${formatNumber(p.submittedTotal)}</span><span class="text-[10px] font-bold text-emerald-600 block mt-1">Progres Bersih: ${formatNumber(cleanProgress)}</span>`;
+            } else if (type === 'NIK_KOSONG') {
+               valHtml = `<span class="text-xl font-bold text-purple-600">${formatNumber(p.nikKosong)}</span><span class="text-[10px] font-semibold uppercase tracking-wider text-slate-500 block">NIK Kosong</span><span class="text-[10px] font-bold text-blue-600 block mt-1">Total Progres: ${formatNumber(p.progress)}</span>`;
+            }
+
+            card.innerHTML = `
+              <div class="overflow-hidden mr-2">
+                <span class="font-bold text-slate-700 text-sm block truncate">${idx + 1}. ${p.name}</span>
+                <span class="text-xs text-slate-500 block truncate mt-0.5">${pmlSubtitle}</span>
+              </div>
+              <div class="text-right shrink-0">
+                ${valHtml}
+              </div>
+            `;
+            container.appendChild(card);
+          });
+        }
+
+        // Show Modal
+        const modal = document.getElementById("modal-admin-alert");
+        modal.classList.remove("hidden");
+        setTimeout(() => {
+          modal.querySelector("div").classList.remove("scale-95");
+          modal.querySelector("div").classList.add("scale-100");
+        }, 10);
+      }
+    </script>
+  </body>
+</html>
